@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz San Valentín</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            color: #ff3366;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+        h1 {
+            font-size: 3.5em;
+            margin-top: 50px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 600px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        button {
+            background-color: #ff3366;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            max-width: 500px;
+            text-align: left;
+            animation: zoomIn 0.5s ease-in-out forwards;
+        }
+        .popup h2 {
+            margin-top: 0;
+            color: #ff3366;
+        }
+        .popup p {
+            color: #333;
+            font-size: 1.2em;
+            line-height: 1.8;
+        }
+        .popup button {
+            background-color: #ff3366;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .popup button:hover {
+            background-color: #cc0052;
+        }
+        .floating-hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        .floating-hearts span {
+            position: absolute;
+            display: block;
+            width: 20px;
+            height: 20px;
+            background: #ff3366;
+            opacity: 0.7;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            animation: float 5s infinite ease-in-out;
+        }
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) scale(1);
+                opacity: 0;
+            }
+        }
+        .floating-hearts span:nth-child(1) {
+            left: 10%;
+            animation-duration: 4s;
+        }
+        .floating-hearts span:nth-child(2) {
+            left: 30%;
+            animation-duration: 6s;
+            animation-delay: 1s;
+        }
+        .floating-hearts span:nth-child(3) {
+            left: 50%;
+            animation-duration: 5s;
+            animation-delay: 2s;
+        }
+        .floating-hearts span:nth-child(4) {
+            left: 70%;
+            animation-duration: 7s;
+            animation-delay: 3s;
+        }
+        .floating-hearts span:nth-child(5) {
+            left: 90%;
+            animation-duration: 4.5s;
+            animation-delay: 1.5s;
+        }
+        @keyframes zoomIn {
+            from {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            .container {
+                padding: 20px;
+            }
+            .popup {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-hearts">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div class="container">
+        <h1>Jirafa y Pinguina ❤️</h1>
+        <p>Solo estaré pensándote mediante esta carta.</p>
+        <button onclick="showPopup()">Haz clic aquí para abrir la carta</button>
+    </div>
+
+    <!-- Carta interactiva -->
+    <div class="popup" id="popup">
+        <h2>Mi Carta para Ti</h2>
+        <p id="letter-content"></p>
+        <button onclick="nextPart()">Siguiente</button>
+        <button onclick="closePopup()">Cerrar</button>
+    </div>
+
+    <script>
+        const letterParts = [
+            "Amor,",
+            "No te amo por tu físico, aunque eres hermosa…",
+            "Te amo por todo lo que eres, por esa forma de existir que me tocó el corazón y ya no me dejó ser el mismo.",
+            "Te amo porque, aún con tus silencios, sigues siendo lo más apreciado que tengo.",
+            "Te amo, aunque no lo notes, aunque no me preguntes, aunque no parezca que te importe.",
+            "Sigo aquí, contigo en el alma, pensándote en cada gesto, esperando en cada día una señal tuya que me diga que aún me llevas en ti.",
+            "Si tan solo supieras cuánto me importas, cuánto me haces falta, cuánto daría por tenerte, por no perderte.",
+            "Si tan solo supieras que aún te sigo amando... con todo, a pesar de todo, y contigo, siempre contigo…"
+        ];
+
+        let currentPart = 0;
+
+        function showPopup() {
+            document.getElementById('popup').style.display = 'block';
+            typeText(letterParts[currentPart], 'letter-content');
+        }
+
+        function nextPart() {
+            currentPart++;
+            if (currentPart < letterParts.length) {
+                typeText(letterParts[currentPart], 'letter-content');
+                createHeart();
+            } else {
+                document.getElementById('letter-content').innerHTML = `
+                    <p>Gracias por leer mi carta. ❤️</p>
+                    <p>Espero que te haya gustado tanto como me gustó escribirla para ti.</p>
+                `;
+                document.querySelector('button[onclick="nextPart()"]').style.display = 'none';
+            }
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+            currentPart = 0; // Reiniciar la carta
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.textContent = '💖';
+            heart.style.position = 'absolute';
+            heart.style.left = `${Math.random() * 100}%`;
+            heart.style.bottom = '50px';
+            heart.style.fontSize = `${Math.random() * 2 + 1}em`;
+            heart.style.animation = 'floatUp 2s ease-in-out forwards';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 2000);
+        }
+
+        function typeText(text, elementId) {
+            let i = 0;
+            const element = document.getElementById(elementId);
+            element.innerHTML = '';
+            const interval = setInterval(() => {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 50);
+        }
+    </script>
+</body>
+</html>
