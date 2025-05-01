@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Una-Linda.chica</title>
+    <title>Feliz San Valentín</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -56,17 +56,23 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             z-index: 10;
             max-width: 500px;
+            max-height: 80vh;
             text-align: left;
             animation: zoomIn 0.5s ease-in-out forwards;
+            overflow: hidden;
         }
         .popup h2 {
             margin-top: 0;
             color: #ff3366;
         }
-        .popup p {
-            color: #333;
+        .popup .scrollable-content {
+            max-height: 60vh;
+            overflow-y: auto;
+            padding-right: 10px;
+            margin-top: 10px;
             font-size: 1.2em;
             line-height: 1.8;
+            color: #333;
         }
         .popup button {
             background-color: #ff3366;
@@ -80,6 +86,62 @@
         }
         .popup button:hover {
             background-color: #cc0052;
+        }
+        .floating-hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        .floating-hearts span {
+            position: absolute;
+            display: block;
+            width: 20px;
+            height: 20px;
+            background: #ff3366;
+            opacity: 0.7;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            animation: float 5s infinite ease-in-out;
+        }
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) scale(1);
+                opacity: 0;
+            }
+        }
+        .floating-hearts span:nth-child(1) {
+            left: 10%;
+            animation-duration: 4s;
+        }
+        .floating-hearts span:nth-child(2) {
+            left: 30%;
+            animation-duration: 6s;
+            animation-delay: 1s;
+        }
+        .floating-hearts span:nth-child(3) {
+            left: 50%;
+            animation-duration: 5s;
+            animation-delay: 2s;
+        }
+        .floating-hearts span:nth-child(4) {
+            left: 70%;
+            animation-duration: 7s;
+            animation-delay: 3s;
+        }
+        .floating-hearts span:nth-child(5) {
+            left: 90%;
+            animation-duration: 4.5s;
+            animation-delay: 1.5s;
         }
         @keyframes zoomIn {
             from {
@@ -124,9 +186,27 @@
             color: #333;
             margin-top: 20px;
         }
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            .container {
+                padding: 20px;
+            }
+            .popup {
+                max-width: 90%;
+            }
+        }
     </style>
 </head>
 <body>
+    <div class="floating-hearts">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
     <div class="container">
         <h1>Jirafa y Pinguina ❤️</h1>
         <p>Solo estaré pensándote mediante esta carta.</p>
@@ -136,7 +216,7 @@
     <!-- Carta interactiva -->
     <div class="popup" id="popup">
         <h2>Mi Carta para Ti</h2>
-        <p id="letter-content"></p>
+        <div class="scrollable-content" id="letter-content"></div>
         <button onclick="nextPart()">Siguiente</button>
         <button onclick="closePopup()">Cerrar</button>
     </div>
