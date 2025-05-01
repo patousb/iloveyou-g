@@ -1,9 +1,9 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IloveYou-G</title>
+    <title>Feliz San Valentín</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -81,62 +81,6 @@
         .popup button:hover {
             background-color: #cc0052;
         }
-        .floating-hearts {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: -1;
-        }
-        .floating-hearts span {
-            position: absolute;
-            display: block;
-            width: 20px;
-            height: 20px;
-            background: #ff3366;
-            opacity: 0.7;
-            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            animation: float 5s infinite ease-in-out;
-        }
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) scale(0.5);
-                opacity: 0;
-            }
-            50% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-10vh) scale(1);
-                opacity: 0;
-            }
-        }
-        .floating-hearts span:nth-child(1) {
-            left: 10%;
-            animation-duration: 4s;
-        }
-        .floating-hearts span:nth-child(2) {
-            left: 30%;
-            animation-duration: 6s;
-            animation-delay: 1s;
-        }
-        .floating-hearts span:nth-child(3) {
-            left: 50%;
-            animation-duration: 5s;
-            animation-delay: 2s;
-        }
-        .floating-hearts span:nth-child(4) {
-            left: 70%;
-            animation-duration: 7s;
-            animation-delay: 3s;
-        }
-        .floating-hearts span:nth-child(5) {
-            left: 90%;
-            animation-duration: 4.5s;
-            animation-delay: 1.5s;
-        }
         @keyframes zoomIn {
             from {
                 transform: translate(-50%, -50%) scale(0.8);
@@ -147,27 +91,42 @@
                 opacity: 1;
             }
         }
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2em;
+        @keyframes heartExpand {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
             }
-            .container {
-                padding: 20px;
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
             }
-            .popup {
-                max-width: 90%;
+            100% {
+                transform: scale(1);
+                opacity: 1;
             }
+        }
+        .final-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 20;
+        }
+        .final-message .heart {
+            font-size: 5em;
+            color: #ff3366;
+            animation: heartExpand 1s ease-in-out forwards;
+        }
+        .final-message p {
+            font-size: 1.5em;
+            color: #333;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="floating-hearts">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
     <div class="container">
         <h1>Jirafa y Pinguina ❤️</h1>
         <p>Solo estaré pensándote mediante esta carta.</p>
@@ -182,6 +141,12 @@
         <button onclick="closePopup()">Cerrar</button>
     </div>
 
+    <!-- Mensaje final -->
+    <div class="final-message" id="final-message">
+        <div class="heart">❤️</div>
+        <p>Gracias por ver esta carta, lo hice con mucho amor ❤️</p>
+    </div>
+
     <script>
         const letterParts = [
             "Amor,",
@@ -191,7 +156,8 @@
             "Te amo, aunque no lo notes, aunque no me preguntes, aunque no parezca que te importe.",
             "Sigo aquí, contigo en el alma, pensándote en cada gesto, esperando en cada día una señal tuya que me diga que aún me llevas en ti.",
             "Si tan solo supieras cuánto me importas, cuánto me haces falta, cuánto daría por tenerte, por no perderte.",
-            "Si tan solo supieras que aún te sigo amando... con todo, a pesar de todo, y contigo, siempre contigo…"
+            "Si tan solo supieras que aún te sigo amando... con todo, a pesar de todo, y contigo, siempre contigo…",
+            "Sé que no soy perfecto, pero quiero ser todo lo que sueñas. Quiero ser la persona que te entienda, no solo en las cosas grandes, sino también en los pequeños detalles. Quiero que me digas qué te gusta: qué te hace reír, qué te hace sentir segura. Enséñame cómo amarte de la manera en que quieres ser amada. No quiero asumir que sé lo que necesitas. Quiero escucharte, aprender. Tu felicidad significa mucho para mí, y nunca dejaré de intentar ser la persona que te la brinde. Quiero ser quien esté ahí para ti, quien lo haga bien, quien aprenda de sus errores. Siempre estaré dispuesto a crecer, a cambiar y a amarte más profundamente que ayer. Cuéntame tus sueños, tus deseos, tus miedos, y te prometo que estaré aquí. Mereces ser amada de una forma que se sienta bien para ti, y yo estoy aquí, dispuesto a hacer lo que sea necesario para ser esa persona para ti. Así que solo sé que te amo."
         ];
 
         let currentPart = 0;
@@ -205,31 +171,14 @@
             currentPart++;
             if (currentPart < letterParts.length) {
                 typeText(letterParts[currentPart], 'letter-content');
-                createHeart();
             } else {
-                document.getElementById('letter-content').innerHTML = `
-                    <p>Gracias por leer mi carta. ❤️</p>
-                    <p>Espero que te haya gustado tanto como me gustó escribirla para ti.</p>
-                `;
-                document.querySelector('button[onclick="nextPart()"]').style.display = 'none';
+                showFinalAnimation();
             }
         }
 
         function closePopup() {
             document.getElementById('popup').style.display = 'none';
             currentPart = 0; // Reiniciar la carta
-        }
-
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.textContent = '💖';
-            heart.style.position = 'absolute';
-            heart.style.left = `${Math.random() * 100}%`;
-            heart.style.bottom = '50px';
-            heart.style.fontSize = `${Math.random() * 2 + 1}em`;
-            heart.style.animation = 'floatUp 2s ease-in-out forwards';
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 2000);
         }
 
         function typeText(text, elementId) {
@@ -244,6 +193,12 @@
                     clearInterval(interval);
                 }
             }, 50);
+        }
+
+        function showFinalAnimation() {
+            document.getElementById('popup').style.display = 'none';
+            const finalMessage = document.getElementById('final-message');
+            finalMessage.style.display = 'block';
         }
     </script>
 </body>
