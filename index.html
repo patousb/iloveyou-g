@@ -7,21 +7,24 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
 
+    /* Base styling */
     body {
       margin: 0;
       font-family: 'Great Vibes', cursive;
       background: linear-gradient(135deg, #ff9a9e, #fad0c4);
       overflow-x: hidden;
       transition: background 0.5s ease;
+      padding: 0;
     }
 
+    /* Container */
     .container {
       text-align: center;
-      padding: 50px 20px;
+      padding: 20px;
     }
 
     h1 {
-      font-size: 3.5em;
+      font-size: 2.8em;
       color: #ff3366;
       text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
       margin-bottom: 10px;
@@ -50,6 +53,7 @@
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
     }
 
+    /* Floating hearts effect */
     .floating-hearts span {
       position: absolute;
       width: 20px;
@@ -70,6 +74,7 @@
       z-index: -1;
     }
 
+    /* Pop-up content */
     .popup {
       display: none;
       position: fixed;
@@ -102,6 +107,7 @@
       line-height: 1.6;
     }
 
+    /* Final message */
     .final-message {
       display: none;
       position: fixed;
@@ -123,6 +129,42 @@
       color: #333;
     }
 
+    /* Chatbot */
+    #chatbot-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: white;
+      border-radius: 15px;
+      padding: 20px;
+      width: 280px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      z-index: 1002;
+    }
+
+    #chatbot-container .chat-box {
+      max-height: 200px;
+      overflow-y: auto;
+      border-bottom: 2px solid #ff3366;
+      padding-bottom: 10px;
+    }
+
+    #chatbot-container .chat-box p {
+      font-size: 1.1em;
+      color: #444;
+      margin: 5px 0;
+    }
+
+    #chatbot-container input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 1em;
+      border-radius: 5px;
+      border: 1px solid #ff3366;
+    }
+
+    /* Animations */
     @keyframes float {
       0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
       50% { opacity: 1; }
@@ -135,7 +177,7 @@
       100% { transform: scale(1); opacity: 1; }
     }
 
-    /* Noche */
+    /* Night mode */
     .night {
       background: linear-gradient(to bottom, #2c3e50, #000);
       color: white;
@@ -148,6 +190,73 @@
     .night .popup {
       background: #1a1a1a;
       color: #fff;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.2em;
+      }
+
+      p {
+        font-size: 1.1em;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 1em;
+      }
+
+      .floating-hearts span {
+        width: 15px;
+        height: 15px;
+      }
+
+      .popup {
+        padding: 20px;
+        width: 85%;
+      }
+
+      #chatbot-container {
+        width: 240px;
+      }
+
+      .final-message .heart {
+        font-size: 4em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.8em;
+      }
+
+      p {
+        font-size: 1em;
+      }
+
+      button {
+        padding: 8px 16px;
+        font-size: 0.9em;
+      }
+
+      .floating-hearts span {
+        width: 12px;
+        height: 12px;
+      }
+
+      .popup {
+        padding: 15px;
+        width: 90%;
+      }
+
+      #chatbot-container {
+        width: 200px;
+      }
+
+      .final-message .heart {
+        font-size: 3.5em;
+      }
     }
   </style>
 </head>
@@ -169,6 +278,7 @@
     <p>Solo estaré pensándote mediante esta carta.</p>
     <button onclick="showPopup()">Haz clic aquí para abrir la carta</button>
     <button onclick="toggleNightMode()">Modo Noche</button>
+    <button onclick="toggleChatbot()">Hazme una pregunta</button>
   </div>
 
   <div class="popup" id="popup">
@@ -183,7 +293,16 @@
     <p>Gracias por ver esta carta, lo hice con mucho amor ❤️</p>
   </div>
 
+  <!-- Chatbot -->
+  <div id="chatbot-container" style="display: none;">
+    <div class="chat-box" id="chat-box">
+      <p><strong>Bot:</strong> ¡Hola, amor! ¿Cómo estás?</p>
+    </div>
+    <input type="text" id="chat-input" placeholder="Escribe aquí..." onkeydown="if(event.key === 'Enter') sendMessage()">
+  </div>
+
   <script>
+    // Función de la carta y demás interacción
     const letterParts = [
       "Amor,",
       "No te amo por tu físico, aunque eres hermosa…",
@@ -239,6 +358,11 @@
     function toggleNightMode() {
       document.body.classList.toggle('night');
     }
-  </script>
-</body>
-</html>
+
+    // Bot IA
+    const responses = [
+      "¡Te amo más de lo que las palabras pueden decir!",
+      "Eres mi todo, mi razón de existir.",
+      "No puedo dejar de pensar en ti.",
+      "Cada día me haces más feliz, mi amor.",
+      "Eres mi sol
