@@ -2,34 +2,51 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Jirafa y Pinguina ❤️</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Roboto:wght@300;400;700&display=swap');
+
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
-      font-family: 'Great Vibes', cursive;
+      font-family: 'Roboto', sans-serif;
       background: linear-gradient(135deg, #ff9a9e, #fad0c4);
       overflow-x: hidden;
       transition: background 0.5s ease;
+      min-height: 100vh;
+      touch-action: manipulation;
     }
 
     .container {
       text-align: center;
-      padding: 50px 20px;
+      padding: 20px;
+      max-width: 100%;
     }
 
     h1 {
-      font-size: 3.5em;
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.5em;
       color: #ff3366;
       text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-      margin-bottom: 10px;
+      margin-bottom: 15px;
     }
 
     p {
-      font-size: 1.3em;
+      font-size: 1.1em;
       color: #333;
+      line-height: 1.5;
+    }
+
+    .buttons-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
     }
 
     button {
@@ -37,27 +54,31 @@
       color: white;
       border: none;
       padding: 12px 24px;
-      font-size: 1.2em;
-      border-radius: 10px;
+      font-size: 1em;
+      border-radius: 25px;
       cursor: pointer;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      transition: transform 0.2s, box-shadow 0.2s;
-      margin: 10px;
+      transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+      margin: 5px 0;
+      width: 100%;
+      max-width: 300px;
+      font-weight: bold;
     }
 
-    button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    button:active {
+      transform: scale(0.98);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .floating-hearts span {
       position: absolute;
-      width: 20px;
-      height: 20px;
+      width: 15px;
+      height: 15px;
       background: #ff3366;
       clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
       animation: float 7s infinite ease-in-out;
       opacity: 0.7;
+      will-change: transform;
     }
 
     .floating-hearts {
@@ -68,6 +89,7 @@
       left: 0;
       overflow: hidden;
       z-index: -1;
+      pointer-events: none;
     }
 
     .popup {
@@ -76,30 +98,48 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(255, 255, 255, 0.95);
-      padding: 30px;
-      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.98);
+      padding: 20px;
+      border-radius: 15px;
       width: 90%;
-      max-width: 600px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      text-align: left;
+      max-width: 500px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      text-align: center;
       z-index: 1000;
+      max-height: 80vh;
+      overflow: hidden;
     }
 
     .popup h2 {
       color: #ff3366;
       margin-top: 0;
-      font-family: 'Arial', sans-serif;
+      font-family: 'Great Vibes', cursive;
+      font-size: 2em;
     }
 
     .scrollable-content {
-      max-height: 300px;
+      max-height: 50vh;
       overflow-y: auto;
-      font-family: 'Arial', sans-serif;
-      font-size: 1.2em;
+      font-size: 1em;
       color: #444;
-      margin-top: 10px;
+      margin: 15px 0;
       line-height: 1.6;
+      text-align: left;
+      padding: 5px;
+    }
+
+    .popup-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .popup-buttons button {
+      flex: 1;
+      max-width: 120px;
+      padding: 10px;
+      font-size: 0.9em;
     }
 
     .final-message {
@@ -110,16 +150,23 @@
       transform: translate(-50%, -50%);
       text-align: center;
       z-index: 1001;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 15px;
+      width: 80%;
+      max-width: 400px;
     }
 
     .final-message .heart {
-      font-size: 5em;
+      font-size: 3em;
       color: #ff3366;
       animation: heartExpand 1s ease-in-out forwards;
+      display: block;
+      margin-bottom: 15px;
     }
 
     .final-message p {
-      font-size: 1.5em;
+      font-size: 1.2em;
       color: #333;
     }
 
@@ -130,32 +177,101 @@
       right: 20px;
       background-color: white;
       border-radius: 15px;
-      padding: 20px;
-      width: 300px;
+      width: 90%;
+      max-width: 350px;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
       z-index: 1002;
+      display: none;
+      flex-direction: column;
+      max-height: 60vh;
+    }
+
+    .chat-header {
+      background-color: #ff3366;
+      color: white;
+      padding: 12px 15px;
+      border-radius: 15px 15px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-header h3 {
+      margin: 0;
+      font-size: 1.1em;
+    }
+
+    .close-chat {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.2em;
+      cursor: pointer;
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     #chatbot-container .chat-box {
-      max-height: 200px;
+      max-height: 40vh;
       overflow-y: auto;
-      border-bottom: 2px solid #ff3366;
-      padding-bottom: 10px;
+      padding: 15px;
+      flex-grow: 1;
     }
 
     #chatbot-container .chat-box p {
-      font-size: 1.1em;
+      font-size: 0.95em;
       color: #444;
-      margin: 5px 0;
+      margin: 8px 0;
+      padding: 8px 12px;
+      border-radius: 15px;
+      max-width: 80%;
+      word-wrap: break-word;
     }
 
-    #chatbot-container input {
-      width: calc(100% - 20px);
+    #chatbot-container .user-message {
+      background-color: #ff3366;
+      color: white;
+      margin-left: auto;
+      border-bottom-right-radius: 5px;
+    }
+
+    #chatbot-container .bot-message {
+      background-color: #f0f0f0;
+      margin-right: auto;
+      border-bottom-left-radius: 5px;
+    }
+
+    .chat-input-container {
+      display: flex;
       padding: 10px;
-      margin-top: 10px;
-      font-size: 1em;
-      border-radius: 5px;
+      border-top: 1px solid #eee;
+    }
+
+    #chat-input {
+      flex-grow: 1;
+      padding: 10px;
+      font-size: 0.95em;
+      border-radius: 20px;
       border: 1px solid #ff3366;
+      outline: none;
+    }
+
+    .send-button {
+      background-color: #ff3366;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      margin-left: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
     }
 
     @keyframes float {
@@ -184,11 +300,72 @@
       background: #1a1a1a;
       color: #fff;
     }
+
+    .night .scrollable-content {
+      color: #ddd;
+    }
+
+    .night #chatbot-container {
+      background-color: #2c3e50;
+      color: white;
+    }
+
+    .night .chat-header {
+      background-color: #1a1a1a;
+    }
+
+    .night #chatbot-container .bot-message {
+      background-color: #34495e;
+      color: white;
+    }
+
+    .night #chat-input {
+      background-color: #34495e;
+      color: white;
+      border-color: #1a1a1a;
+    }
+
+    /* Media queries para móviles */
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2em;
+      }
+      
+      p {
+        font-size: 1em;
+      }
+      
+      .popup {
+        padding: 15px;
+        width: 95%;
+      }
+      
+      .scrollable-content {
+        max-height: 55vh;
+      }
+      
+      #chatbot-container {
+        width: 95%;
+        right: 2.5%;
+        bottom: 10px;
+      }
+    }
+
+    /* Efecto de carga */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    body {
+      animation: fadeIn 0.5s ease-out;
+    }
   </style>
 </head>
 <body>
-  <audio autoplay loop>
+  <audio id="bg-music" loop>
     <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+    Tu navegador no soporta el elemento de audio.
   </audio>
 
   <div class="floating-hearts">
@@ -202,29 +379,43 @@
   <div class="container">
     <h1>Jirafa y Pinguina ❤️</h1>
     <p>Solo estaré pensándote mediante esta carta.</p>
-    <button onclick="showPopup()">Haz clic aquí para abrir la carta</button>
-    <button onclick="toggleNightMode()">Modo Noche</button>
-    <button onclick="toggleChatbot()">Hazme una pregunta</button>
+    <div class="buttons-container">
+      <button onclick="showPopup()">Abrir la carta</button>
+      <button onclick="toggleNightMode()">Modo Noche</button>
+      <button onclick="playMusic()">Reproducir música</button>
+      <button onclick="toggleChatbot()">Hazme una pregunta</button>
+    </div>
   </div>
 
   <div class="popup" id="popup">
     <h2>Mi Carta para Ti</h2>
     <div class="scrollable-content" id="letter-content"></div>
-    <button onclick="nextPart()">Siguiente</button>
-    <button onclick="closePopup()">Cerrar</button>
+    <div class="popup-buttons">
+      <button onclick="nextPart()">Siguiente</button>
+      <button onclick="closePopup()">Cerrar</button>
+    </div>
   </div>
 
   <div class="final-message" id="final-message">
     <div class="heart">❤️</div>
-    <p>Gracias por ver esta carta, lo hice con mucho amor ❤️</p>
+    <p>Gracias por leer esta carta, lo hice con mucho amor ❤️</p>
+    <button onclick="closeFinalMessage()" style="margin-top: 15px;">Cerrar</button>
   </div>
 
-  <!-- Chatbot -->
-  <div id="chatbot-container" style="display: none;">
-    <div class="chat-box" id="chat-box">
-      <p><strong>Bot:</strong> ¡Hola, amor! ¿Cómo estás?</p>
+  <!-- Chatbot mejorado -->
+  <div id="chatbot-container">
+    <div class="chat-header">
+      <h3>Chat de Amor</h3>
+      <button class="close-chat" onclick="toggleChatbot()">×</button>
     </div>
-    <input type="text" id="chat-input" placeholder="Escribe aquí..." onkeydown="if(event.key === 'Enter') sendMessage()">
+    <div class="chat-box" id="chat-box">
+      <p class="bot-message"><strong>Bot:</strong> ¡Hola, amor! ¿En qué puedo ayudarte hoy?</p>
+    </div>
+    <div class="chat-input-container">
+      <input type="text" id="chat-input" placeholder="Escribe tu mensaje..." 
+             onkeydown="if(event.key === 'Enter') sendMessage()">
+      <button class="send-button" onclick="sendMessage()">→</button>
+    </div>
   </div>
 
   <script>
@@ -241,6 +432,7 @@
     ];
 
     let currentPart = 0;
+    let musicPlayed = false;
 
     function showPopup() {
       document.getElementById('popup').style.display = 'block';
@@ -252,6 +444,7 @@
       currentPart++;
       if (currentPart < letterParts.length) {
         typeText(letterParts[currentPart], 'letter-content');
+        document.getElementById('letter-content').scrollTop = 0;
       } else {
         showFinalAnimation();
       }
@@ -259,6 +452,10 @@
 
     function closePopup() {
       document.getElementById('popup').style.display = 'none';
+    }
+
+    function closeFinalMessage() {
+      document.getElementById('final-message').style.display = 'none';
     }
 
     function typeText(text, elementId) {
@@ -272,16 +469,29 @@
         } else {
           clearInterval(interval);
         }
-      }, 40);
+      }, 30);
     }
 
     function showFinalAnimation() {
       document.getElementById('popup').style.display = 'none';
-      document.getElementById('final-message').style.display = 'block';
+      const finalMessage = document.getElementById('final-message');
+      finalMessage.style.display = 'block';
+      
+      // Scroll al inicio del mensaje final
+      finalMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     function toggleNightMode() {
       document.body.classList.toggle('night');
+      
+      // Guardar preferencia en localStorage
+      const isNight = document.body.classList.contains('night');
+      localStorage.setItem('nightMode', isNight);
+    }
+
+    // Verificar preferencia de modo noche al cargar
+    if (localStorage.getItem('nightMode') === 'true') {
+      document.body.classList.add('night');
     }
 
     // Bot IA
@@ -291,27 +501,74 @@
       "No puedo dejar de pensar en ti.",
       "Cada día me haces más feliz, mi amor.",
       "Eres mi sol en los días grises.",
-      "Mi corazón late solo por ti."
+      "Mi corazón late solo por ti.",
+      "Eres la persona más especial en mi vida.",
+      "Nada me hace más feliz que estar contigo.",
+      "Eres perfecta tal como eres.",
+      "Mi amor por ti crece cada día más."
     ];
 
     function toggleChatbot() {
       const chatbot = document.getElementById('chatbot-container');
-      chatbot.style.display = chatbot.style.display === 'none' ? 'block' : 'none';
+      if (chatbot.style.display === 'none' || !chatbot.style.display) {
+        chatbot.style.display = 'flex';
+        document.getElementById('chat-input').focus();
+      } else {
+        chatbot.style.display = 'none';
+      }
     }
 
     function sendMessage() {
-      const userInput = document.getElementById('chat-input').value;
-      if (userInput.trim() !== '') {
+      const userInput = document.getElementById('chat-input');
+      const message = userInput.value.trim();
+      
+      if (message !== '') {
         const chatBox = document.getElementById('chat-box');
-        chatBox.innerHTML += `<p><strong>Tú:</strong> ${userInput}</p>`;
-        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+        chatBox.innerHTML += `<p class="user-message"><strong>Tú:</strong> ${message}</p>`;
+        
+        // Limpiar input
+        userInput.value = '';
+        
+        // Simular "escribiendo..."
+        const typingIndicator = document.createElement('p');
+        typingIndicator.className = 'bot-message';
+        typingIndicator.innerHTML = '<em>Bot está escribiendo...</em>';
+        chatBox.appendChild(typingIndicator);
+        chatBox.scrollTop = chatBox.scrollHeight;
+        
+        // Respuesta después de un breve retraso
         setTimeout(() => {
-          chatBox.innerHTML += `<p><strong>Bot:</strong> ${randomResponse}</p>`;
-          document.getElementById('chat-input').value = '';
+          chatBox.removeChild(typingIndicator);
+          const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+          chatBox.innerHTML += `<p class="bot-message"><strong>Bot:</strong> ${randomResponse}</p>`;
           chatBox.scrollTop = chatBox.scrollHeight;
-        }, 1000);
+        }, 1000 + Math.random() * 2000); // Retraso aleatorio entre 1-3s
       }
     }
+
+    function playMusic() {
+      const music = document.getElementById('bg-music');
+      if (musicPlayed) {
+        music.pause();
+        music.currentTime = 0;
+        musicPlayed = false;
+        event.target.textContent = 'Reproducir música';
+      } else {
+        // Los navegadores móviles requieren interacción del usuario para reproducir audio
+        music.play().then(() => {
+          musicPlayed = true;
+          event.target.textContent = 'Detener música';
+        }).catch(error => {
+          alert('Por favor, toca el botón otra vez para permitir la reproducción de música.');
+        });
+      }
+    }
+
+    // Mejorar la experiencia táctil
+    document.addEventListener('touchstart', function() {}, {passive: true});
+
+    // Inicializar chatbot oculto
+    document.getElementById('chatbot-container').style.display = 'none';
   </script>
 </body>
 </html>
