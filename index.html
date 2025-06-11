@@ -103,7 +103,8 @@
 
   <!-- Elemento de Audio para la música de fondo -->
   <audio id="bg-music" loop>
-    <source src="https://cdn.pixabay.com/audio/2022/02/14/audio_29c32a8832.mp3" type="audio/mpeg">
+    <!-- **CAMBIO IMPORTANTE:** URL de la música actualizada a la de tu archivo original. -->
+    <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
     Tu navegador no soporta audio.
   </audio>
 
@@ -209,34 +210,6 @@
     let musicPlayed = false;
     let chatHistory = [];
 
-    // Theme configuration
-    const themes = {
-        dark: {
-            name: "dark",
-            bgColor: '#111827',
-            heartColor: 0xff4f81,
-            particleColor: 0xffffff,
-            primaryTextColor: 'text-pink-300',
-            secondaryTextColor: 'text-gray-300',
-            buttonBg: 'bg-pink-500',
-            buttonHoverBg: 'hover:bg-pink-600',
-            themeBtnText: 'Modo Claro'
-        },
-        light: {
-            name: "light",
-            bgColor: '#f0f9ff',
-            heartColor: 0x60a5fa,
-            particleColor: 0x333333,
-            primaryTextColor: 'text-blue-500',
-            secondaryTextColor: 'text-gray-600',
-            buttonBg: 'bg-blue-500',
-            buttonHoverBg: 'hover:bg-blue-600',
-            themeBtnText: 'Modo Oscuro'
-        }
-    };
-    let currentTheme = themes.dark;
-
-
     // --- 3D SCENE SETUP ---
     function init3D() {
       camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -271,7 +244,7 @@
       const extrudeSettings = { steps: 2, depth: 1, bevelEnabled: true, bevelThickness: 0.5, bevelSize: 0.5, bevelSegments: 2 };
       const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
       geometry.center();
-      const material = new THREE.MeshStandardMaterial({ color: currentTheme.heartColor, metalness: 0.3, roughness: 0.4 });
+      const material = new THREE.MeshStandardMaterial({ color: 0xff4f81, metalness: 0.3, roughness: 0.4 });
       heartMesh = new THREE.Mesh(geometry, material);
       heartMesh.scale.set(0.1, 0.1, 0.1);
       scene.add(heartMesh);
@@ -286,7 +259,7 @@
         }
         particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         
-        const particlesMaterial = new THREE.PointsMaterial({ size: 0.02, sizeAttenuation: true, color: currentTheme.particleColor, transparent: true, opacity: 0.7 });
+        const particlesMaterial = new THREE.PointsMaterial({ size: 0.02, sizeAttenuation: true, color: 0xffffff, transparent: true, opacity: 0.7 });
         particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
         scene.add(particlesMesh);
     }
@@ -350,7 +323,7 @@
         document.getElementById('main-content').classList.add('opacity-0', 'pointer-events-none');
         setTimeout(() => {
             popupEl.classList.remove('opacity-0');
-            cardEl.classList.remove('scale-95');
+            if (cardEl) cardEl.classList.remove('scale-95');
         }, 50);
     }
     
@@ -359,8 +332,7 @@
         if (cardEl) cardEl.classList.add('scale-95');
         setTimeout(() => {
              popupEl.classList.add('hidden');
-             // Only restore main content if all popups are closed
-             if(letterPopup.classList.contains('hidden') && finalMessagePopup.classList.contains('hidden') && questionPopup.classList.contains('hidden') && celebrationPopup.classList.contains('hidden')) {
+             if(document.querySelectorAll('.fixed.inset-0:not(.hidden)').length === 0) {
                 document.getElementById('main-content').classList.remove('opacity-0', 'pointer-events-none');
              }
         }, 300);
@@ -445,28 +417,23 @@
 
     // --- UI & THEME LOGIC ---
     window.toggleTheme = () => {
-      currentTheme = (currentTheme.name === 'dark') ? themes.light : themes.dark;
-      document.body.classList.toggle('dark-theme', currentTheme.name === 'light');
+      document.body.classList.toggle('dark-theme');
+      const isDark = !document.body.classList.contains('dark-theme');
       
-      // Update 3D scene colors
-      heartMesh.material.color.setHex(currentTheme.heartColor);
-      particlesMesh.material.color.setHex(currentTheme.particleColor);
-      
-      // Update body and text colors
-      document.body.style.backgroundColor = currentTheme.bgColor;
-      const mainH1 = document.querySelector('h1');
-      mainH1.classList.remove(themes.dark.primaryTextColor, themes.light.primaryTextColor);
-      mainH1.classList.add(currentTheme.primaryTextColor);
-      
-      const mainP = document.querySelector('main p');
-      mainP.classList.remove(themes.dark.secondaryTextColor, themes.light.secondaryTextColor);
-      mainP.classList.add(currentTheme.secondaryTextColor);
-      
-      const letterBtn = document.querySelector('button[onclick="showLetter()"]');
-      letterBtn.classList.remove(themes.dark.buttonBg, themes.light.buttonBg, themes.dark.buttonHoverBg, themes.light.buttonHoverBg);
-      letterBtn.classList.add(currentTheme.buttonBg, currentTheme.buttonHoverBg);
+      const newHeartColor = isDark ? 0xff4f81 : 0x60a5fa;
+      const newParticleColor = isDark ? 0xffffff : 0x333333;
+      heartMesh.material.color.setHex(newHeartColor);
+      particlesMesh.material.color.setHex(newParticleColor);
 
-      document.getElementById('theme-btn-text').textContent = currentTheme.themeBtnText;
+      document.querySelector('h1').classList.toggle('text-pink-300', isDark);
+      document.querySelector('h1').classList.toggle('text-blue-500', !isDark);
+      document.querySelector('main p').classList.toggle('text-gray-300', isDark);
+      document.querySelector('main p').classList.toggle('text-gray-600', !isDark);
+
+      document.body.classList.toggle('bg-gray-900', isDark);
+      document.body.classList.toggle('bg-sky-100', !isDark);
+
+      document.getElementById('theme-btn-text').textContent = isDark ? 'Modo Claro' : 'Modo Oscuro';
     }
     
     window.toggleMusic = () => {
@@ -476,11 +443,21 @@
             music.pause();
             musicBtn.classList.remove('animate-pulse');
         } else {
-            music.play().catch(e => console.error("La reproducción automática fue bloqueada.", e));
-            musicBtn.classList.add('animate-pulse');
+            music.play().catch(e => {
+                console.error("La reproducción automática fue bloqueada. Se requiere interacción del usuario.", e)
+            });
         }
-        musicPlayed = !musicPlayed;
     }
+
+    // Manejar la reproducción después de la primera interacción del usuario
+    document.body.addEventListener('click', () => {
+        if (!musicPlayed && document.getElementById('bg-music').paused) {
+             document.getElementById('bg-music').play().then(() => {
+                musicPlayed = true;
+                document.getElementById('music-btn').classList.add('animate-pulse');
+             }).catch(e => {});
+        }
+    }, { once: true });
     
     // --- CHATBOT LOGIC ---
     const chatPopup = document.getElementById('chat-popup');
@@ -491,7 +468,7 @@
     window.openChat = () => {
         showPopup(chatPopup, chatCard);
         if (chatHistory.length === 0) {
-            addBotMessage("¡Hola, mi amor! Estoy aquí para escucharte. ¿Qué tienes en mente?");
+            addBotMessage("¡Hola, mi amor! Soy un eco de tus sentimientos. ¿Qué tienes en mente?");
         }
         chatInput.focus();
     };
@@ -503,7 +480,6 @@
         messageEl.textContent = message;
         chatBox.appendChild(messageEl);
         chatBox.scrollTop = chatBox.scrollHeight;
-        chatHistory.push({ role: "user", parts: [{ text: message }] });
     }
 
     function addBotMessage(message, isTyping = false) {
@@ -511,48 +487,29 @@
         if (isTyping) {
             messageEl.id = 'typing-indicator';
             messageEl.className = 'chat-bubble self-start bg-gray-700 text-gray-400 rounded-xl rounded-bl-lg px-4 py-2 max-w-xs';
-            messageEl.innerHTML = `<div class="flex items-center space-x-1">
-                <span class="w-2 h-2 bg-gray-500 rounded-full animate-pulse" style="animation-delay: 0s;"></span>
-                <span class="w-2 h-2 bg-gray-500 rounded-full animate-pulse" style="animation-delay: 0.2s;"></span>
-                <span class="w-2 h-2 bg-gray-500 rounded-full animate-pulse" style="animation-delay: 0.4s;"></span>
-            </div>`;
+            messageEl.innerHTML = `<div class="flex items-center space-x-1"><span class="w-2 h-2 bg-gray-500 rounded-full animate-pulse" style="animation-delay: 0s;"></span><span class="w-2 h-2 bg-gray-500 rounded-full animate-pulse" style="animation-delay: 0.2s;"></span><span class="w-2 h-2 bg-gray-500 rounded-full animate-pulse" style="animation-delay: 0.4s;"></span></div>`;
         } else {
             messageEl.className = 'chat-bubble self-start bg-gray-700 text-white rounded-xl rounded-bl-lg px-4 py-2 max-w-xs';
             messageEl.textContent = message;
-            chatHistory.push({ role: "model", parts: [{ text: message }] });
         }
         chatBox.appendChild(messageEl);
         chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    async function getAIResponse() {
+    // **CAMBIO IMPORTANTE:** Esta función ahora es simple y no necesita servidor.
+    function getAIResponse() {
         const typingIndicator = document.getElementById('typing-indicator');
-        try {
-            const prompt = "Eres un chatbot de pareja extremadamente amoroso y comprensivo llamado 'Corazón Digital'. Tu única función es hablar con tu pareja (el usuario). Tu tono siempre es tierno, romántico, y un poco poético. Le recuerdas cuánto le amas y lo especial que es. Respondes a sus preguntas y comentarios con cariño. Mantén tus respuestas cortas y dulces. Esta es la conversación hasta ahora:\n" + JSON.stringify(chatHistory);
-            
-            const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
-            const apiKey = "";
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            const result = await response.json();
-            
-            if (typingIndicator) typingIndicator.remove();
-
-            if (result.candidates && result.candidates[0].content.parts[0].text) {
-                const text = result.candidates[0].content.parts[0].text;
-                addBotMessage(text);
-            } else {
-                addBotMessage("Mi amor, me quedé sin palabras. Intenta de nuevo.");
-            }
-        } catch (error) {
-            console.error("Error con la IA:", error);
-            if (typingIndicator) typingIndicator.remove();
-            addBotMessage("Oops, mi corazón se confundió un poco. ¿Podrías repetirlo?");
-        }
+        if (typingIndicator) typingIndicator.remove();
+        
+        const responses = [
+            "Cada palabra tuya resuena en mi corazón. ❤️",
+            "Siento lo mismo... y más.",
+            "Gracias por compartir tus pensamientos conmigo.",
+            "Te quiero. Mucho.",
+            "Estoy aquí para ti, siempre."
+        ];
+        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+        addBotMessage(randomResponse);
     }
 
     window.sendMessage = () => {
@@ -561,25 +518,21 @@
             addUserMessage(message);
             chatInput.value = '';
             addBotMessage('', true); // Show typing indicator
-            setTimeout(getAIResponse, 1000);
+            setTimeout(getAIResponse, 1500); // Simula un retraso
         }
     };
     chatInput.addEventListener('keydown', (e) => e.key === 'Enter' && sendMessage());
 
     // --- EVENT LISTENERS ---
-    // For Desktop Mouse Control
     window.addEventListener('mousemove', (event) => {
         mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
     });
 
-    // For Mobile Device Gyroscope Control
     window.addEventListener('deviceorientation', (event) => {
         if (event.beta !== null && event.gamma !== null) {
-            const gamma = event.gamma; // left-to-right tilt (-90 to 90)
-            const beta = event.beta;   // front-to-back tilt (-180 to 180)
-            
-            // Normalize and clamp values for smoother control
+            const gamma = event.gamma;
+            const beta = event.beta;
             mouse.x = Math.max(-1, Math.min(1, gamma / 45));
             mouse.y = Math.max(-1, Math.min(1, beta / 90));
         }
