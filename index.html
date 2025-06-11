@@ -64,6 +64,39 @@
     .chat-bubble {
         animation: bubbleIn 0.3s ease-out forwards;
     }
+    
+    /* Animación del personaje ASCII */
+    @keyframes heartBeat {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.3); }
+    }
+    .heart-char {
+        display: inline-block;
+        animation: heartBeat 1.5s ease-in-out infinite;
+    }
+
+    /* Animación de explosión de corazones */
+    #confetti-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: hidden;
+    }
+    .confetti-heart {
+        position: absolute;
+        color: red;
+        font-size: 24px;
+        animation: explode 1.5s ease-out forwards;
+        opacity: 0;
+    }
+    @keyframes explode {
+        0% { transform: translate(50%, 50%) scale(0); opacity: 1; }
+        100% { transform: translate(var(--x), var(--y)) scale(1); opacity: 0; }
+    }
+
   </style>
 </head>
 <body class="bg-gray-900 text-white overflow-hidden transition-colors duration-500">
@@ -121,6 +154,29 @@
           <p class="text-xl text-gray-200">Gracias por leer esta carta, lo hice con mucho amor.</p>
           <button onclick="closeFinalMessage()" class="mt-6 px-5 py-2 bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-full shadow-lg transition-transform transform hover:scale-105 duration-300">Cerrar</button>
       </div>
+  </div>
+
+  <!-- Question Popup -->
+  <div id="question-popup" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-lg flex items-center justify-center p-4 z-50 hidden opacity-0 transition-opacity duration-300">
+    <div id="question-card" class="relative bg-gray-800 bg-opacity-80 border border-gray-700 rounded-2xl shadow-2xl max-w-lg w-full text-white transform scale-95 transition-all duration-300 text-center p-8">
+        <div class="text-4xl mb-4 font-mono text-pink-300">(&gt;^_^)&gt;<span class="heart-char">❤️</span></div>
+        <p class="text-gray-300 mb-6 leading-relaxed">Se que las cosas entre nosotros no han estado muy bien, hemos tenido malos momentos como buenos momentos, discusiones, peleas, cosas negativas... pero se que podemos ser incluso mas que eso. Quiero luchar contigo, aunque no sea todo el tiempo, aunque no sea por muchos años, realmente te amo y te quiero y te deseo y quiero caminar este camino junto a ti aunque seamos diferentes, pero eres lo que mas deseo y lo que mas quiero.</p>
+        <h3 class="text-2xl font-semibold text-white mb-6">¿Quieres caminar este camino largo junto a mi y luchar por ambos?</h3>
+        <div class="flex justify-center gap-4">
+            <button onclick="handleYesClick()" class="px-8 py-3 bg-green-500 hover:bg-green-600 text-white font-bold rounded-full shadow-lg transition-transform transform hover:scale-105 duration-300">Sí, acepto</button>
+            <button onclick="handleNoClick()" class="px-8 py-3 bg-red-500 hover:bg-red-600 text-white font-bold rounded-full shadow-lg transition-transform transform hover:scale-105 duration-300">No, lo siento</button>
+        </div>
+    </div>
+  </div>
+
+  <!-- Celebration Popup -->
+  <div id="celebration-popup" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-lg flex items-center justify-center p-4 z-50 hidden opacity-0 transition-opacity duration-300">
+    <div id="celebration-card" class="relative bg-gray-800 bg-opacity-80 border border-gray-700 rounded-2xl shadow-2xl max-w-md w-full text-center p-8 text-white transform scale-95 transition-all duration-300">
+        <div id="confetti-container"></div>
+        <div class="text-6xl mb-4">🎉❤️🎉</div>
+        <p class="text-xl text-gray-200">Agradezco que camines junto a mi, de verdad te amo mucho. Quiero que le tomes captura a esto y me lo envies :3</p>
+        <button onclick="closeCelebrationPopup()" class="mt-6 px-5 py-2 bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-full shadow-lg transition-transform transform hover:scale-105 duration-300">Cerrar</button>
+    </div>
   </div>
 
   <!-- Chatbot Modal -->
@@ -272,7 +328,8 @@
     const letterContent = document.getElementById('letter-content');
     const nextButton = document.getElementById('next-button');
     const finalMessagePopup = document.getElementById('final-message-popup');
-    const finalHeart = document.getElementById('final-heart');
+    const questionPopup = document.getElementById('question-popup');
+    const celebrationPopup = document.getElementById('celebration-popup');
 
     function typeText(text) {
       let i = 0;
@@ -299,9 +356,14 @@
     
     function closePopup(popupEl, cardEl) {
         popupEl.classList.add('opacity-0');
-        cardEl.classList.add('scale-95');
-         document.getElementById('main-content').classList.remove('opacity-0', 'pointer-events-none');
-        setTimeout(() => popupEl.classList.add('hidden'), 300);
+        if (cardEl) cardEl.classList.add('scale-95');
+        setTimeout(() => {
+             popupEl.classList.add('hidden');
+             // Only restore main content if all popups are closed
+             if(letterPopup.classList.contains('hidden') && finalMessagePopup.classList.contains('hidden') && questionPopup.classList.contains('hidden') && celebrationPopup.classList.contains('hidden')) {
+                document.getElementById('main-content').classList.remove('opacity-0', 'pointer-events-none');
+             }
+        }, 300);
     }
 
     window.showLetter = () => {
@@ -309,7 +371,6 @@
       showPopup(letterPopup, letterCard);
       typeText(letterParts[currentPart]);
       nextButton.textContent = 'Siguiente';
-      nextButton.style.display = 'block';
     }
 
     window.closeLetter = () => closePopup(letterPopup, letterCard);
@@ -328,19 +389,59 @@
         }
       } else {
         closeLetter();
-        setTimeout(showFinalMessage, 300);
+        setTimeout(showQuestionPopup, 400);
       }
+    }
+    
+    function showQuestionPopup() {
+        showPopup(questionPopup, document.getElementById('question-card'));
     }
 
     function showFinalMessage() {
       showPopup(finalMessagePopup, finalMessagePopup.querySelector('div'));
       setTimeout(() => {
-          finalHeart.classList.remove('scale-0');
-          finalHeart.classList.add('transform', 'scale-100');
+          finalMessagePopup.querySelector('#final-heart').classList.remove('scale-0');
+          finalMessagePopup.querySelector('#final-heart').classList.add('transform', 'scale-100');
       }, 200);
     }
     
     window.closeFinalMessage = () => closePopup(finalMessagePopup, finalMessagePopup.querySelector('div'));
+
+    window.handleYesClick = () => {
+        closePopup(questionPopup, document.getElementById('question-card'));
+        setTimeout(showCelebrationPopup, 400);
+    }
+
+    window.handleNoClick = () => {
+        closePopup(questionPopup, document.getElementById('question-card'));
+        setTimeout(showFinalMessage, 400);
+    }
+
+    function showCelebrationPopup() {
+        showPopup(celebrationPopup, document.getElementById('celebration-card'));
+        createConfetti();
+    }
+    
+    window.closeCelebrationPopup = () => closePopup(celebrationPopup, document.getElementById('celebration-card'));
+
+    function createConfetti() {
+        const container = document.getElementById('confetti-container');
+        container.innerHTML = '';
+        const heartColors = ['#ff4f81', '#ff7a9e', '#fce4ec'];
+        for (let i = 0; i < 100; i++) {
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤️';
+            heart.classList.add('confetti-heart');
+            const angle = Math.random() * 2 * Math.PI;
+            const distance = Math.random() * 200 + 50;
+            heart.style.setProperty('--x', `${Math.cos(angle) * distance}px`);
+            heart.style.setProperty('--y', `${Math.sin(angle) * distance}px`);
+            heart.style.color = heartColors[Math.floor(Math.random() * heartColors.length)];
+            heart.style.animationDelay = `${Math.random() * 0.5}s`;
+            container.appendChild(heart);
+        }
+    }
+
 
     // --- UI & THEME LOGIC ---
     window.toggleTheme = () => {
