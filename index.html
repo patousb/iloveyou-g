@@ -103,7 +103,6 @@
 
   <!-- Elemento de Audio para la música de fondo -->
   <audio id="bg-music" loop>
-    <!-- **CAMBIO IMPORTANTE:** URL de la música actualizada a la de tu archivo original. -->
     <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
     Tu navegador no soporta audio.
   </audio>
@@ -436,28 +435,34 @@
       document.getElementById('theme-btn-text').textContent = isDark ? 'Modo Claro' : 'Modo Oscuro';
     }
     
+    // **CAMBIO IMPORTANTE:** Lógica de música mejorada para mayor compatibilidad
     window.toggleMusic = () => {
         const music = document.getElementById('bg-music');
         const musicBtn = document.getElementById('music-btn');
-        if (musicPlayed) {
-            music.pause();
-            musicBtn.classList.remove('animate-pulse');
+
+        // Revisa el estado real del reproductor de audio
+        if (music.paused) {
+            // Intenta reproducir la música
+            const playPromise = music.play();
+
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    // La reproducción comenzó exitosamente
+                    musicPlayed = true;
+                    musicBtn.classList.add('animate-pulse');
+                }).catch(error => {
+                    // La reproducción fue prevenida por el navegador
+                    console.error("La reproducción fue prevenida por el navegador:", error);
+                    // El usuario simplemente tendrá que hacer clic de nuevo.
+                });
+            }
         } else {
-            music.play().catch(e => {
-                console.error("La reproducción automática fue bloqueada. Se requiere interacción del usuario.", e)
-            });
+            // Si se está reproduciendo, páusala
+            music.pause();
+            musicPlayed = false;
+            musicBtn.classList.remove('animate-pulse');
         }
     }
-
-    // Manejar la reproducción después de la primera interacción del usuario
-    document.body.addEventListener('click', () => {
-        if (!musicPlayed && document.getElementById('bg-music').paused) {
-             document.getElementById('bg-music').play().then(() => {
-                musicPlayed = true;
-                document.getElementById('music-btn').classList.add('animate-pulse');
-             }).catch(e => {});
-        }
-    }, { once: true });
     
     // --- CHATBOT LOGIC ---
     const chatPopup = document.getElementById('chat-popup');
@@ -496,7 +501,7 @@
         chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    // **CAMBIO IMPORTANTE:** Esta función ahora es simple y no necesita servidor.
+    // Esta función ahora es simple y no necesita servidor.
     function getAIResponse() {
         const typingIndicator = document.getElementById('typing-indicator');
         if (typingIndicator) typingIndicator.remove();
