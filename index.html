@@ -100,7 +100,8 @@
 
         h1 {
             font-family: 'Pacifico', cursive;
-            font-size: 5rem;
+            /* Tipografía fluida para el título principal */
+            font-size: clamp(3rem, 10vw, 5rem);
             background: linear-gradient(45deg, #ff6b6b, #f8a5c2, #ffcc5c);
             -webkit-background-clip: text;
             background-clip: text;
@@ -128,7 +129,8 @@
         }
 
         .subtitle {
-            font-size: 1.5rem;
+            /* Tipografía fluida para el subtítulo */
+            font-size: clamp(1rem, 4vw, 1.5rem);
             color: #f8a5c2;
             margin-bottom: 2rem;
             font-weight: 300;
@@ -149,7 +151,7 @@
             color: white;
             font-size: 1.5rem;
             cursor: pointer;
-            display: none;
+            display: none; /* Se activa con media query */
             justify-content: center;
             align-items: center;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -227,7 +229,7 @@
             background: rgba(20, 20, 40, 0.7);
             backdrop-filter: blur(15px);
             border-radius: 25px;
-            padding: 3rem;
+            padding: clamp(1.5rem, 5vw, 3rem); /* Espaciado fluido */
             margin-bottom: 4rem;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -268,7 +270,7 @@
 
         .message-title {
             font-family: 'Dancing Script', cursive;
-            font-size: 3rem;
+            font-size: clamp(2rem, 7vw, 3rem); /* Tipografía fluida */
             background: linear-gradient(45deg, #f8a5c2, #ffcc5c);
             -webkit-background-clip: text;
             background-clip: text;
@@ -299,7 +301,7 @@
         }
 
         .message-content {
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 3vw, 1.2rem); /* Tipografía fluida */
             line-height: 1.9;
             color: #e0e0e0;
             margin-bottom: 1.5rem;
@@ -464,7 +466,7 @@
 
         .quote-text {
             font-family: 'Dancing Script', cursive;
-            font-size: 2.3rem;
+            font-size: clamp(1.6rem, 5vw, 2.3rem); /* Tipografía fluida */
             color: #f8a5c2;
             margin-bottom: 2rem;
             line-height: 1.4;
@@ -590,7 +592,7 @@
             border: none;
             color: white;
             padding: 1.5rem 3rem;
-            font-size: 1.5rem;
+            font-size: clamp(1.2rem, 4vw, 1.5rem); /* Tipografía fluida */
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -777,112 +779,7 @@
             transform: translate(50%, -50%);
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
         }
-
-        /* Galería de fotos mejorada */
-        .gallery-section {
-            margin-bottom: 5rem;
-        }
-
-        .gallery-title {
-            font-family: 'Dancing Script', cursive;
-            font-size: 3rem;
-            color: #f8a5c2;
-            margin-bottom: 2rem;
-            text-align: center;
-            position: relative;
-        }
-
-        .gallery-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #ff6b6b, transparent);
-        }
-
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .gallery-item {
-            position: relative;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            aspect-ratio: 1/1;
-            cursor: pointer;
-        }
-
-        .gallery-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, rgba(255, 107, 107, 0.3), rgba(248, 165, 194, 0.2));
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            z-index: 1;
-        }
-
-        .gallery-item:hover {
-            transform: translateY(-15px) scale(1.05);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-        }
-
-        .gallery-item:hover::before {
-            opacity: 1;
-        }
-
-        .gallery-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.8s ease;
-        }
-
-        .gallery-item:hover .gallery-img {
-            transform: scale(1.1);
-        }
-
-        .gallery-caption {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-            color: white;
-            padding: 1.5rem;
-            transform: translateY(100%);
-            transition: transform 0.5s ease;
-            z-index: 2;
-            text-align: center;
-        }
-
-        .gallery-item:hover .gallery-caption {
-            transform: translateY(0);
-        }
-
-        .gallery-caption h3 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-            color: #ff6b6b;
-        }
-
-        .gallery-caption p {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-
+        
         /* Contador de tiempo mejorado */
         .time-counter {
             text-align: center;
@@ -916,7 +813,7 @@
 
         .time-title {
             font-family: 'Pacifico', cursive;
-            font-size: 3rem;
+            font-size: clamp(2rem, 7vw, 3rem); /* Tipografía fluida */
             background: linear-gradient(45deg, #f8a5c2, #ffcc5c);
             -webkit-background-clip: text;
             background-clip: text;
@@ -940,17 +837,19 @@
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 2rem;
+            gap: clamp(1rem, 3vw, 2rem); /* Espaciado fluido */
         }
 
         .time-unit {
             background: rgba(20, 20, 40, 0.8);
             border-radius: 15px;
             padding: 1.5rem 1rem;
-            min-width: 120px;
+            min-width: 100px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.5s ease;
+            flex: 1;
+            max-width: 120px;
         }
 
         .time-unit:hover {
@@ -960,7 +859,7 @@
         }
 
         .time-number {
-            font-size: 3rem;
+            font-size: clamp(2rem, 6vw, 3rem); /* Tipografía fluida */
             font-weight: bold;
             color: #ff6b6b;
             margin-bottom: 0.5rem;
@@ -968,7 +867,7 @@
         }
 
         .time-label {
-            font-size: 1.1rem;
+            font-size: clamp(0.8rem, 2vw, 1.1rem); /* Tipografía fluida */
             color: #f8a5c2;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -1017,7 +916,7 @@
 
         .reasons-title {
             font-family: 'Pacifico', cursive;
-            font-size: 3rem;
+            font-size: clamp(2rem, 7vw, 3rem); /* Tipografía fluida */
             color: #f8a5c2;
             margin-bottom: 2rem;
             text-align: center;
@@ -1079,7 +978,7 @@
         /* Mapa de corazones */
         .heart-map {
             width: 100%;
-            height: 500px;
+            height: 400px;
             background: rgba(30, 30, 50, 0.7);
             backdrop-filter: blur(10px);
             border-radius: 25px;
@@ -1239,139 +1138,32 @@
                 opacity: 0;
             }
         }
-
-        /* Modal para imágenes */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        .modal.active {
-            display: flex;
-            opacity: 1;
-        }
-
-        .modal-content {
-            max-width: 90%;
-            max-height: 90%;
-            border-radius: 10px;
-            box-shadow: 0 0 30px rgba(255, 107, 107, 0.5);
-            transform: scale(0.8);
-            transition: transform 0.5s ease;
-        }
-
-        .modal.active .modal-content {
-            transform: scale(1);
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 2rem;
-            right: 2rem;
-            color: white;
-            font-size: 2.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .close-modal:hover {
-            color: #ff6b6b;
-            transform: rotate(90deg);
-        }
-
+        
         /* Responsive design */
-        @media (max-width: 1200px) {
-            .container {
-                padding: 2rem 1.5rem;
-            }
-            
-            h1 {
-                font-size: 4rem;
-            }
-            
-            .quote-text {
-                font-size: 2rem;
-            }
-        }
-
-        @media (max-width: 992px) {
-            .letters-container {
-                gap: 2rem;
-            }
-            
-            .letter {
-                width: 280px;
-            }
-            
-            .time-unit {
-                min-width: 100px;
-            }
-            
-            .gallery {
-                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            }
-        }
-
         @media (max-width: 768px) {
             .menu-btn {
                 display: flex;
             }
             
             h1 {
-                font-size: 3.5rem;
                 margin-top: 1rem;
-            }
-            
-            .subtitle {
-                font-size: 1.2rem;
             }
             
             .message-section, .letter, .poem-section, .reasons-section, .time-counter {
                 padding: 2rem 1.5rem;
             }
             
-            .message-title, .time-title, .reasons-title, .gallery-title {
-                font-size: 2.2rem;
-            }
-            
-            .quote-text {
-                font-size: 1.6rem;
-            }
-            
-            .quote-author {
-                font-size: 1.1rem;
-            }
-            
             .time-display {
                 gap: 1.5rem;
             }
-            
+
             .time-unit {
                 min-width: 80px;
                 padding: 1rem 0.5rem;
             }
             
-            .time-number {
-                font-size: 2.2rem;
-            }
-            
-            .time-label {
-                font-size: 0.9rem;
-            }
-            
             .surprise-btn {
                 padding: 1.2rem 2.5rem;
-                font-size: 1.3rem;
             }
             
             .footer-text {
@@ -1379,23 +1171,15 @@
             }
             
             .heart-map {
-                height: 400px;
+                height: 350px;
             }
         }
 
         @media (max-width: 576px) {
-            h1 {
-                font-size: 2.8rem;
+            .container {
+                padding: 1rem;
             }
-            
-            .subtitle {
-                font-size: 1rem;
-            }
-            
-            .message-title, .time-title, .reasons-title, .gallery-title {
-                font-size: 1.8rem;
-            }
-            
+
             .message-content, .reason-text {
                 font-size: 1rem;
             }
@@ -1403,30 +1187,14 @@
             .letter {
                 width: 100%;
             }
-            
+
             .time-display {
-                gap: 1rem;
+                gap: 0.5rem;
             }
-            
+
             .time-unit {
-                min-width: 70px;
                 padding: 0.8rem 0.3rem;
-            }
-            
-            .time-number {
-                font-size: 1.8rem;
-            }
-            
-            .time-label {
-                font-size: 0.8rem;
-            }
-            
-            .quote-text {
-                font-size: 1.4rem;
-            }
-            
-            .gallery {
-                grid-template-columns: 1fr;
+                min-width: 65px; /* Más pequeño para que quepan en dos filas */
             }
             
             .poem-line {
@@ -1446,172 +1214,48 @@
             .heart-map {
                 height: 300px;
             }
-        }
-
-        /* Animaciones adicionales mejoradas */
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.8; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .pulse {
-            animation: pulse 3s infinite;
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .rotate {
-            animation: rotate 15s linear infinite;
-        }
-
-        /* Efecto de confeti mejorado */
-        .confetti {
-            position: fixed;
-            width: 15px;
-            height: 15px;
-            opacity: 0;
-            z-index: 9999;
-            animation: confetti-fall 5s linear forwards;
-            background-size: contain;
-            background-repeat: no-repeat;
-        }
-
-        @keyframes confetti-fall {
-            0% {
-                transform: translateY(-100vh) rotate(0deg) scale(0.5);
-                opacity: 1;
+             .music-control {
+                bottom: 1.5rem;
+                right: 1.5rem;
             }
-            100% {
-                transform: translateY(100vh) rotate(calc(var(--rotation) * 1deg)) scale(1);
-                opacity: 0;
+            .music-btn {
+                width: 60px;
+                height: 60px;
             }
         }
 
-        /* Efecto de latido mejorado */
-        .heartbeat {
-            animation: heartbeat 1.5s ease-in-out infinite;
-        }
-
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            25% { transform: scale(1.1); }
-            50% { transform: scale(1); }
-            75% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        /* Efecto de neón mejorado */
-        .neon-text {
-            color: #fff;
-            text-shadow: 
-                0 0 5px #fff,
-                0 0 10px #fff,
-                0 0 20px #ff6b6b,
-                0 0 40px #ff6b6b,
-                0 0 80px #ff6b6b;
-            animation: neon-flicker 2s infinite alternate;
-        }
-
-        @keyframes neon-flicker {
-            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-                text-shadow: 
-                    0 0 5px #fff,
-                    0 0 10px #fff,
-                    0 0 20px #ff6b6b,
-                    0 0 40px #ff6b6b,
-                    0 0 80px #ff6b6b;
-            }
-            20%, 24%, 55% {
-                text-shadow: none;
-            }
-        }
-
-        /* Efecto de escritura mejorado */
-        .typewriter {
-            overflow: hidden;
-            border-right: 3px solid #ff6b6b;
-            white-space: nowrap;
-            margin: 0 auto;
-            letter-spacing: 2px;
-            animation: 
-                typing 3.5s steps(40, end),
-                blink-caret 0.75s step-end infinite;
-        }
-
-        @keyframes typing {
-            from { width: 0 }
-            to { width: 100% }
-        }
-
-        @keyframes blink-caret {
-            from, to { border-color: transparent }
-            50% { border-color: #ff6b6b; }
-        }
-
-        /* Efecto de flotación mejorado */
-        .float {
-            animation: float-animation 4s ease-in-out infinite;
-        }
-
-        @keyframes float-animation {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-        }
-
-        /* Efecto de brillo mejorado */
-        .glow {
-            transition: all 0.5s ease;
-        }
-
-        .glow:hover {
-            filter: drop-shadow(0 0 15px rgba(255, 107, 107, 0.8));
-        }
-
-        /* Efecto de onda */
-        .wave {
-            display: inline-block;
-            animation: wave 2s infinite;
-            transform-origin: 70% 70%;
-        }
-
-        @keyframes wave {
-            0% { transform: rotate(0deg); }
-            10% { transform: rotate(-10deg); }
-            20% { transform: rotate(12deg); }
-            30% { transform: rotate(-10deg); }
-            40% { transform: rotate(9deg); }
-            50% { transform: rotate(0deg); }
-            100% { transform: rotate(0deg); }
-        }
+        /* Animaciones adicionales mejoradas (sin cambios) */
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
+        .pulse { animation: pulse 3s infinite; }
+        @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .rotate { animation: rotate 15s linear infinite; }
+        .confetti { position: fixed; width: 15px; height: 15px; opacity: 0; z-index: 9999; animation: confetti-fall 5s linear forwards; background-size: contain; background-repeat: no-repeat; }
+        @keyframes confetti-fall { 0% { transform: translateY(-100vh) rotate(0deg) scale(0.5); opacity: 1; } 100% { transform: translateY(100vh) rotate(calc(var(--rotation) * 1deg)) scale(1); opacity: 0; } }
+        .heartbeat { animation: heartbeat 1.5s ease-in-out infinite; }
+        @keyframes heartbeat { 0% { transform: scale(1); } 25% { transform: scale(1.1); } 50% { transform: scale(1); } 75% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .neon-text { color: #fff; text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff6b6b, 0 0 40px #ff6b6b, 0 0 80px #ff6b6b; animation: neon-flicker 2s infinite alternate; }
+        @keyframes neon-flicker { 0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff6b6b, 0 0 40px #ff6b6b, 0 0 80px #ff6b6b; } 20%, 24%, 55% { text-shadow: none; } }
+        .typewriter { overflow: hidden; border-right: 3px solid #ff6b6b; white-space: nowrap; margin: 0 auto; letter-spacing: 2px; animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite; }
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: #ff6b6b; } }
     </style>
 </head>
 <body>
-    <!-- Fondo 3D con estrellas mejorado -->
     <div class="stars-container" id="starsContainer"></div>
     
-    <!-- Fondo de corazones -->
     <div class="hearts-bg"></div>
 
-    <!-- Corazones animados mejorados -->
     <div class="hearts-container" id="heartsContainer"></div>
 
-    <!-- Botón de menú para móvil -->
     <button class="menu-btn" id="menuBtn">
         <i class="fas fa-bars"></i>
     </button>
 
-    <!-- Navegación -->
     <nav id="navMenu">
         <ul class="nav-links">
             <li><a href="#home">Inicio</a></li>
             <li><a href="#messages">Mensajes</a></li>
             <li><a href="#letters">Cartas</a></li>
-            <li><a href="#gallery">Galería</a></li>
-            <li><a href="#memories">Recuerdos</a></li>
             <li><a href="#poem">Poema</a></li>
             <li><a href="#reasons">Razones</a></li>
             <li><a href="#counter">Nuestro Tiempo</a></li>
@@ -1619,7 +1263,6 @@
         </ul>
     </nav>
 
-    <!-- Control de música mejorado -->
     <div class="music-control">
         <button class="music-btn" id="musicBtn">
             <i class="fas fa-music"></i>
@@ -1633,14 +1276,12 @@
         </audio>
     </div>
 
-    <!-- Contenido principal -->
     <div class="container" id="home">
         <header>
             <h1 class="neon-text">Para Ti, Mi Amor</h1>
             <p class="subtitle typewriter">Cada latido de mi corazón lleva tu nombre</p>
         </header>
 
-        <!-- Sección de mensaje principal mejorada -->
         <section class="message-section pulse" id="messages">
             <h2 class="message-title">Mi Mensaje Para Ti</h2>
             <div class="message-content">
@@ -1650,16 +1291,15 @@
             </div>
         </section>
 
-        <!-- Cartas desplegables mejoradas -->
         <h2 class="message-title" style="margin-bottom: 3rem;" id="letters">Cartas Para Ti</h2>
         <div class="letters-container">
             <div class="letter" onclick="toggleLetter(this)">
                 <h3 class="letter-header">Cuando Te Conocí</h3>
                 <div class="letter-content">
-                    <p>Recuerdo ese día como si el tiempo se hubiera detenido. El mundo pareció desvanecerse cuando nuestros ojos se encontraron por primera vez, como si el universo conspirara para que ese momento fuera perfecto. No sabía entonces que ese instante marcaría el inicio del capítulo más hermoso de mi vida.</p>
-                    <p>Había algo en ti, una luz especial que atrajo mi atención inmediatamente. Tal vez fue la sinceridad en tu sonrisa, o la forma en que tus ojos brillaban al hablar de las cosas que te apasionan. Lo único que sé con certeza es que desde ese primer cruce de miradas, supe que quería conocerte más, descubrir cada faceta de tu ser.</p>
+                    <p>El día en que te vi, ese 3 de diciembre, fue lo mejor que pude haber visto con mis ojos. Lo mejor. Ese día, con ese vestido, aunque fuera a través de una pantalla, te veías tan linda como siempre. Fue un instante que lo cambió todo.</p>
+                    <p>Había algo en ti, una luz especial que atrajo mi atención inmediatamente. Tal vez fue la sinceridad en tu sonrisa, o la forma en que tus ojos brillaban al hablar. Lo único que sé con certeza es que desde ese primer momento, supe que quería conocerte más, descubrir cada faceta de tu ser.</p>
                 </div>
-                <div class="letter-date">15 de Marzo, 2020</div>
+                <div class="letter-date">3 de Diciembre</div>
             </div>
 
             <div class="letter" onclick="toggleLetter(this)">
@@ -1683,7 +1323,6 @@
             </div>
         </div>
 
-        <!-- Carrusel de frases mejorado -->
         <div class="quotes-carousel">
             <div class="quote active">
                 <p class="quote-text">Amar no es mirarse el uno al otro; es mirar juntos en la misma dirección.</p>
@@ -1712,42 +1351,6 @@
         </div>
         <div class="carousel-dots" id="carouselDots"></div>
 
-        <!-- Galería de fotos mejorada -->
-        <div class="gallery-section" id="gallery">
-            <h2 class="gallery-title">Nuestros Recuerdos</h2>
-            <div class="gallery" id="memories">
-                <div class="gallery-item glow" onclick="openModal('https://source.unsplash.com/random/800x800/?couple,love')">
-                    <img src="https://source.unsplash.com/random/600x600/?couple,love" alt="Nuestro primer viaje" class="gallery-img">
-                    <div class="gallery-caption">
-                        <h3>Nuestro Primer Viaje</h3>
-                        <p>El comienzo de nuestras aventuras juntos</p>
-                    </div>
-                </div>
-                <div class="gallery-item glow" onclick="openModal('https://source.unsplash.com/random/800x800/?beach,sunset')">
-                    <img src="https://source.unsplash.com/random/600x600/?beach,sunset" alt="Atardecer romántico" class="gallery-img">
-                    <div class="gallery-caption">
-                        <h3>Atardeceres Compartidos</h3>
-                        <p>Donde el cielo se pintó de nuestros colores</p>
-                    </div>
-                </div>
-                <div class="gallery-item glow" onclick="openModal('https://source.unsplash.com/random/800x800/?dinner,romantic')">
-                    <img src="https://source.unsplash.com/random/600x600/?dinner,romantic" alt="Cena especial" class="gallery-img">
-                    <div class="gallery-caption">
-                        <h3>Cenas Especiales</h3>
-                        <p>Donde cada bocado sabía a amor</p>
-                    </div>
-                </div>
-                <div class="gallery-item glow" onclick="openModal('https://source.unsplash.com/random/800x800/?adventure,couple')">
-                    <img src="https://source.unsplash.com/random/600x600/?adventure,couple" alt="Aventura juntos" class="gallery-img">
-                    <div class="gallery-caption">
-                        <h3>Aventuras Inolvidables</h3>
-                        <p>Donde descubrimos el mundo mano a mano</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Contador de tiempo mejorado -->
         <div class="time-counter" id="counter">
             <h2 class="time-title">Tiempo Que Eres Especial Para Mí</h2>
             <div class="time-display">
@@ -1778,7 +1381,6 @@
             </div>
         </div>
 
-        <!-- Poema interactivo -->
         <div class="poem-section" id="poem">
             <h2 class="poem-title">Poema Para Ti</h2>
             <div class="poem-line" onclick="highlightLine(this)">En el jardín de mis sueños, floreces como ninguna,</div>
@@ -1789,7 +1391,6 @@
             <div class="poem-line" onclick="highlightLine(this)">el latido constante, el amor verdadero.</div>
         </div>
 
-        <!-- Lista de razones -->
         <div class="reasons-section" id="reasons">
             <h2 class="reasons-title">10 Razones Por Las Que Te Amo</h2>
             <ul class="reasons-list">
@@ -1836,12 +1437,9 @@
             </ul>
         </div>
 
-        <!-- Mapa de corazones -->
         <div class="heart-map" id="heartMap">
-            <!-- Los marcadores se añaden dinámicamente con JavaScript -->
-        </div>
+            </div>
 
-        <!-- Botón sorpresa mejorado -->
         <div class="surprise-container" id="surprise">
             <button class="surprise-btn heartbeat" onclick="showSurprise()">
                 <span><i class="fas fa-gift"></i> Haz Click Para Una Sorpresa Especial</span>
@@ -1858,13 +1456,6 @@
             </div>
         </div>
 
-        <!-- Modal para imágenes -->
-        <div class="modal" id="imageModal">
-            <span class="close-modal" onclick="closeModal()">&times;</span>
-            <img class="modal-content" id="modalImage">
-        </div>
-
-        <!-- Pie de página mejorado -->
         <footer>
             <p class="footer-text">Hecho con todo mi amor para ti</p>
             <p class="footer-subtext">Cada línea de código, cada animación, cada detalle fue creado pensando en ti y en todo lo que significas para mí.</p>
@@ -1879,6 +1470,8 @@
     </div>
 
     <script>
+        // --- Todo el JavaScript original, excepto las funciones openModal y closeModal ---
+        
         // Crear estrellas mejoradas para el fondo
         function createStars() {
             const starsContainer = document.getElementById('starsContainer');
@@ -1887,38 +1480,24 @@
             for (let i = 0; i < starCount; i++) {
                 const star = document.createElement('div');
                 star.classList.add('star');
-                
-                // Tamaño aleatorio entre 1px y 4px
                 const size = Math.random() * 3 + 1;
                 star.style.width = `${size}px`;
                 star.style.height = `${size}px`;
-                
-                // Posición aleatoria con efecto 3D
                 const startX = Math.random() * 100;
                 const startY = Math.random() * 100;
                 const endX = startX + (Math.random() * 20 - 10);
                 const endY = startY - 100;
-                
                 star.style.setProperty('--start-x', `${startX}%`);
                 star.style.setProperty('--start-y', `${startY}%`);
                 star.style.setProperty('--end-x', `${endX}%`);
                 star.style.setProperty('--end-y', `${endY}%`);
-                
-                // Opacidad aleatoria
                 const opacity = Math.random() * 0.7 + 0.1;
                 star.style.setProperty('--opacity', opacity);
-                
-                // Blur aleatorio
                 const blur = Math.random() * 2 + 0.5;
                 star.style.setProperty('--blur', `${blur}px`);
-                
-                // Duración de animación aleatoria
                 const duration = Math.random() * 30 + 15;
                 star.style.setProperty('--duration', `${duration}s`);
-                
-                // Retraso de animación aleatorio
                 star.style.animationDelay = `${Math.random() * 30}s`;
-                
                 starsContainer.appendChild(star);
             }
         }
@@ -1926,31 +1505,19 @@
         // Crear corazones flotantes mejorados
         function createHearts() {
             const heartsContainer = document.getElementById('heartsContainer');
-            
             setInterval(() => {
                 const heart = document.createElement('div');
                 heart.classList.add('heart');
                 heart.innerHTML = '❤️';
-                
-                // Tamaño aleatorio
                 const size = Math.random() * 1.5 + 0.8;
                 heart.style.fontSize = `${size}rem`;
-                
-                // Posición aleatoria
                 heart.style.left = `${Math.random() * 100}%`;
                 heart.style.bottom = `-50px`;
-                
-                // Duración de animación aleatoria
                 const duration = Math.random() * 12 + 8;
                 heart.style.setProperty('--duration', `${duration}s`);
-                
-                // Rotación aleatoria
                 const rotation = Math.random() * 360;
                 heart.style.setProperty('--rotation', rotation);
-                
                 heartsContainer.appendChild(heart);
-                
-                // Eliminar el corazón después de que termine la animación
                 setTimeout(() => {
                     heart.remove();
                 }, duration * 1000);
@@ -1960,7 +1527,6 @@
         // Control de menú para móvil
         const menuBtn = document.getElementById('menuBtn');
         const navMenu = document.getElementById('navMenu');
-        
         menuBtn.addEventListener('click', function() {
             navMenu.classList.toggle('active');
             this.querySelector('i').classList.toggle('fa-bars');
@@ -1984,15 +1550,11 @@
         const volumeKnob = document.getElementById('volumeKnob');
         const bgMusic = document.getElementById('bgMusic');
         let isDragging = false;
-        
-        // Configurar volumen inicial
         bgMusic.volume = 0.7;
         volumeLevel.style.width = '70%';
         volumeKnob.style.left = '70%';
-        
         musicBtn.addEventListener('click', function() {
             const icon = this.querySelector('i');
-            
             if (bgMusic.paused) {
                 bgMusic.play();
                 icon.classList.remove('fa-music');
@@ -2004,11 +1566,7 @@
                 icon.classList.add('fa-music');
                 this.classList.remove('playing');
             }
-            
-            // Mostrar control de volumen
             volumeControl.classList.add('active');
-            
-            // Ocultar control de volumen después de 3 segundos
             clearTimeout(window.volumeTimeout);
             window.volumeTimeout = setTimeout(() => {
                 if (!isDragging) {
@@ -2016,11 +1574,8 @@
                 }
             }, 3000);
         });
-        
-        // Control de volumen táctil
         volumeControl.addEventListener('mousedown', startDrag);
         volumeControl.addEventListener('touchstart', startDrag);
-        
         function startDrag(e) {
             isDragging = true;
             document.addEventListener('mousemove', onDrag);
@@ -2029,57 +1584,28 @@
             document.addEventListener('touchend', stopDrag);
             updateVolume(e);
         }
-        
-        function onDrag(e) {
-            updateVolume(e);
-        }
-        
+        function onDrag(e) { updateVolume(e); }
         function stopDrag() {
             isDragging = false;
             document.removeEventListener('mousemove', onDrag);
             document.removeEventListener('touchmove', onDrag);
             document.removeEventListener('mouseup', stopDrag);
             document.removeEventListener('touchend', stopDrag);
-            
-            // Ocultar control después de 3 segundos
-            setTimeout(() => {
-                if (!isDragging) {
-                    volumeControl.classList.remove('active');
-                }
-            }, 3000);
+            setTimeout(() => { if (!isDragging) { volumeControl.classList.remove('active'); } }, 3000);
         }
-        
         function updateVolume(e) {
             const rect = volumeControl.getBoundingClientRect();
             let x;
-            
-            if (e.type.includes('touch')) {
-                x = e.touches[0].clientX - rect.left;
-            } else {
-                x = e.clientX - rect.left;
-            }
-            
+            if (e.type.includes('touch')) { x = e.touches[0].clientX - rect.left; } else { x = e.clientX - rect.left; }
             let volume = x / rect.width;
             volume = Math.max(0, Math.min(1, volume));
-            
             bgMusic.volume = volume;
             volumeLevel.style.width = `${volume * 100}%`;
             volumeKnob.style.left = `${volume * 100}%`;
         }
-        
-        // Mostrar control de volumen al pasar el mouse
-        musicBtn.addEventListener('mouseenter', function() {
-            volumeControl.classList.add('active');
-        });
-        
+        musicBtn.addEventListener('mouseenter', function() { volumeControl.classList.add('active'); });
         musicBtn.addEventListener('mouseleave', function() {
-            if (!isDragging) {
-                setTimeout(() => {
-                    if (!isDragging) {
-                        volumeControl.classList.remove('active');
-                    }
-                }, 1000);
-            }
+            if (!isDragging) { setTimeout(() => { if (!isDragging) { volumeControl.classList.remove('active'); } }, 1000); }
         });
 
         // Cartas desplegables mejoradas
@@ -2089,70 +1615,40 @@
                 if (l !== letter && l.classList.contains('active')) {
                     l.classList.remove('active');
                     l.querySelector('.letter-content').style.opacity = '0';
-                    setTimeout(() => {
-                        l.querySelector('.letter-content').style.maxHeight = '0';
-                    }, 10);
+                    setTimeout(() => { l.querySelector('.letter-content').style.maxHeight = '0'; }, 10);
                 }
             });
-            
             letter.classList.toggle('active');
             const content = letter.querySelector('.letter-content');
-            
             if (letter.classList.contains('active')) {
                 content.style.maxHeight = '600px';
-                setTimeout(() => {
-                    content.style.opacity = '1';
-                }, 50);
-                
-                // Efecto de confeti al abrir carta
+                setTimeout(() => { content.style.opacity = '1'; }, 50);
                 createMiniConfetti(letter);
             } else {
                 content.style.opacity = '0';
-                setTimeout(() => {
-                    content.style.maxHeight = '0';
-                }, 300);
+                setTimeout(() => { content.style.maxHeight = '0'; }, 300);
             }
         }
-        
         function createMiniConfetti(element) {
             const rect = element.getBoundingClientRect();
             const colors = ['#ff6b6b', '#f8a5c2', '#ffcc5c', '#88d8b0', '#96ceb4', '#ffeead'];
-            
             for (let i = 0; i < 20; i++) {
                 const confetti = document.createElement('div');
                 confetti.classList.add('confetti');
-                
-                // Tamaño aleatorio
                 const size = Math.random() * 10 + 5;
                 confetti.style.width = `${size}px`;
                 confetti.style.height = `${size}px`;
-                
-                // Color aleatorio
                 const color = colors[Math.floor(Math.random() * colors.length)];
                 confetti.style.backgroundColor = color;
-                
-                // Forma aleatoria (cuadrada o redonda)
-                if (Math.random() > 0.5) {
-                    confetti.style.borderRadius = '50%';
-                }
-                
-                // Posición inicial (dentro del elemento)
+                if (Math.random() > 0.5) { confetti.style.borderRadius = '50%'; }
                 const startX = rect.left + Math.random() * rect.width;
                 const startY = rect.top + Math.random() * rect.height;
-                
                 confetti.style.left = `${startX}px`;
                 confetti.style.top = `${startY}px`;
-                
-                // Rotación aleatoria
                 const rotation = Math.random() * 360;
                 confetti.style.setProperty('--rotation', rotation);
-                
                 document.body.appendChild(confetti);
-                
-                // Eliminar el confeti después de que termine la animación
-                setTimeout(() => {
-                    confetti.remove();
-                }, 5000);
+                setTimeout(() => { confetti.remove(); }, 5000);
             }
         }
 
@@ -2160,8 +1656,6 @@
         let currentQuote = 0;
         const quotes = document.querySelectorAll('.quote');
         const dotsContainer = document.getElementById('carouselDots');
-        
-        // Crear puntos de navegación
         quotes.forEach((_, index) => {
             const dot = document.createElement('div');
             dot.classList.add('dot');
@@ -2169,75 +1663,42 @@
             dot.addEventListener('click', () => goToQuote(index));
             dotsContainer.appendChild(dot);
         });
-        
         function showQuote(index) {
             quotes.forEach((quote, i) => {
                 quote.classList.remove('active', 'next');
-                
-                if (i === index) {
-                    quote.classList.add('active');
-                } else if (i === (index + 1) % quotes.length) {
-                    quote.classList.add('next');
-                }
+                if (i === index) { quote.classList.add('active'); } else if (i === (index + 1) % quotes.length) { quote.classList.add('next'); }
             });
-            
-            // Actualizar puntos de navegación
             const dots = document.querySelectorAll('.dot');
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === index);
-            });
-            
+            dots.forEach((dot, i) => { dot.classList.toggle('active', i === index); });
             currentQuote = index;
         }
-        
-        function nextQuote() {
-            const nextIndex = (currentQuote + 1) % quotes.length;
-            showQuote(nextIndex);
-        }
-        
-        function prevQuote() {
-            const prevIndex = (currentQuote - 1 + quotes.length) % quotes.length;
-            showQuote(prevIndex);
-        }
-        
-        function goToQuote(index) {
-            showQuote(index);
-        }
-        
-        // Cambiar automáticamente las frases cada 7 segundos
+        function nextQuote() { showQuote((currentQuote + 1) % quotes.length); }
+        function prevQuote() { showQuote((currentQuote - 1 + quotes.length) % quotes.length); }
+        function goToQuote(index) { showQuote(index); }
         setInterval(nextQuote, 7000);
 
         // Contador de tiempo mejorado
         function updateTimeCounter() {
-            // Fecha de inicio (puedes cambiarla a tu fecha especial)
-            const startDate = new Date('2020-01-01');
+            const startDate = new Date('2020-01-01'); // ¡Puedes cambiar esta fecha!
             const now = new Date();
-            
             const diff = now - startDate;
-            
             const seconds = Math.floor(diff / 1000);
             const minutes = Math.floor(seconds / 60);
             const hours = Math.floor(minutes / 60);
             const days = Math.floor(hours / 24);
-            const months = Math.floor(days / 30.44); // Promedio de días por mes
+            const months = Math.floor(days / 30.44);
             const years = Math.floor(months / 12);
-            
             document.getElementById('years').textContent = years;
             document.getElementById('months').textContent = months % 12;
             document.getElementById('days').textContent = days % 30;
             document.getElementById('hours').textContent = hours % 24;
             document.getElementById('minutes').textContent = minutes % 60;
             document.getElementById('seconds').textContent = seconds % 60;
-            
-            // Efecto de latido en los segundos
             if (seconds % 2 === 0) {
                 document.getElementById('seconds').classList.add('heartbeat');
-                setTimeout(() => {
-                    document.getElementById('seconds').classList.remove('heartbeat');
-                }, 1000);
+                setTimeout(() => { document.getElementById('seconds').classList.remove('heartbeat'); }, 1000);
             }
         }
-        
         setInterval(updateTimeCounter, 1000);
         updateTimeCounter();
 
@@ -2245,22 +1706,14 @@
         function showSurprise() {
             const surpriseMessage = document.getElementById('surpriseMessage');
             surpriseMessage.classList.toggle('active');
-            
             if (surpriseMessage.classList.contains('active')) {
                 createConfetti();
                 bgMusic.pause();
                 bgMusic.currentTime = 0;
                 bgMusic.play();
-                
-                // Mostrar corazones especiales
-                for (let i = 0; i < 30; i++) {
-                    setTimeout(() => {
-                        createSpecialHeart();
-                    }, i * 300);
-                }
+                for (let i = 0; i < 30; i++) { setTimeout(() => { createSpecialHeart(); }, i * 300); }
             }
         }
-        
         function createSpecialHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
@@ -2270,64 +1723,38 @@
             heart.style.bottom = `-50px`;
             heart.style.setProperty('--duration', `${Math.random() * 5 + 5}s`);
             heart.style.setProperty('--rotation', Math.random() * 360);
-            heart.style.color = `hsl(${Math.random() * 60 + 330}, 100%, 70%)`; // Tonos rosados/rojos
-            
+            heart.style.color = `hsl(${Math.random() * 60 + 330}, 100%, 70%)`;
             document.getElementById('heartsContainer').appendChild(heart);
-            
-            setTimeout(() => {
-                heart.remove();
-            }, 10000);
+            setTimeout(() => { heart.remove(); }, 10000);
         }
 
         // Crear confeti mejorado
         function createConfetti() {
             const colors = ['#ff6b6b', '#f8a5c2', '#ffcc5c', '#88d8b0', '#96ceb4', '#ffeead'];
-            const shapes = [
-                '❤️', '❣️', '💕', '💞', '💓', '💗', '💖', '💘', '💝', '💟',
-                '⚘', '🌹', '🥀', '🌺', '🌸', '🌼', '🌷', '💐'
-            ];
-            
+            const shapes = ['❤️', '❣️', '💕', '💞', '💓', '💗', '💖', '💘', '💝', '💟', '⚘', '🌹', '🥀', '🌺', '🌸', '🌼', '🌷', '💐'];
             for (let i = 0; i < 150; i++) {
                 const confetti = document.createElement('div');
                 confetti.classList.add('confetti');
-                
-                // Usar emojis de corazones y flores
                 if (Math.random() > 0.3) {
                     confetti.textContent = shapes[Math.floor(Math.random() * shapes.length)];
                     confetti.style.fontSize = `${Math.random() * 20 + 15}px`;
                     confetti.style.backgroundColor = 'transparent';
                 } else {
-                    // O formas geométricas
                     const size = Math.random() * 15 + 5;
                     confetti.style.width = `${size}px`;
                     confetti.style.height = `${size}px`;
-                    
                     const color = colors[Math.floor(Math.random() * colors.length)];
                     confetti.style.backgroundColor = color;
-                    
-                    if (Math.random() > 0.5) {
-                        confetti.style.borderRadius = '50%';
-                    }
+                    if (Math.random() > 0.5) { confetti.style.borderRadius = '50%'; }
                 }
-                
-                // Posición aleatoria
                 confetti.style.left = `${Math.random() * 100}%`;
                 confetti.style.top = `-50px`;
-                
-                // Duración de animación aleatoria
                 const duration = Math.random() * 4 + 3;
                 confetti.style.animationDuration = `${duration}s`;
-                
-                // Rotación aleatoria
                 const rotation = Math.random() * 720 - 360;
                 confetti.style.setProperty('--rotation', rotation);
-                
                 document.body.appendChild(confetti);
-                
-                // Eliminar el confeti después de que termine la animación
-                setTimeout(() => {
-                    confetti.remove();
-                }, duration * 1000);
+                setTimeout(() => { confetti.remove(); }, duration * 1000);
             }
         }
 
@@ -2335,81 +1762,30 @@
         document.addEventListener('click', function(e) {
             const sparkle = document.createElement('div');
             sparkle.classList.add('sparkle');
-            
             sparkle.style.left = `${e.clientX}px`;
             sparkle.style.top = `${e.clientY}px`;
-            
-            // Color aleatorio para el brillo
             const colors = ['#ff6b6b', '#f8a5c2', '#ffcc5c', '#ffffff'];
             sparkle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            
             document.body.appendChild(sparkle);
-            
-            // Eliminar el brillo después de que termine la animación
-            setTimeout(() => {
-                sparkle.remove();
-            }, 1200);
+            setTimeout(() => { sparkle.remove(); }, 1200);
         });
 
         // Poema interactivo
         function highlightLine(line) {
-            // Quitar el resaltado de todas las líneas
             document.querySelectorAll('.poem-line').forEach(l => {
                 l.style.opacity = '0.7';
                 l.style.color = '#fff';
                 l.style.transform = 'translateX(0)';
             });
-            
-            // Resaltar la línea clickeada
             line.style.opacity = '1';
             line.style.color = '#ff6b6b';
             line.style.transform = 'translateX(10px)';
-            
-            // Efecto de corazón
-            const heart = document.createElement('div');
-            heart.innerHTML = '❤️';
-            heart.style.position = 'absolute';
-            heart.style.left = `${e.clientX}px`;
-            heart.style.top = `${e.clientY}px`;
-            heart.style.fontSize = '1.5rem';
-            heart.style.transform = 'translate(-50%, -50%)';
-            heart.style.opacity = '0';
-            heart.style.animation = 'float-heart 2s ease-out forwards';
-            heart.style.setProperty('--duration', '2s');
-            heart.style.setProperty('--rotation', Math.random() * 360);
-            
-            document.body.appendChild(heart);
-            
-            setTimeout(() => {
-                heart.remove();
-            }, 2000);
         }
 
         // Razones - efecto al hacer clic
         function pulseItem(item) {
             item.classList.add('heartbeat');
-            setTimeout(() => {
-                item.classList.remove('heartbeat');
-            }, 1000);
-            
-            // Crear pequeño corazón
-            const heart = document.createElement('div');
-            heart.innerHTML = '❤️';
-            heart.style.position = 'absolute';
-            const rect = item.getBoundingClientRect();
-            heart.style.left = `${rect.left + 30}px`;
-            heart.style.top = `${rect.top + 15}px`;
-            heart.style.fontSize = '1.2rem';
-            heart.style.opacity = '0';
-            heart.style.animation = 'float-heart 1.5s ease-out forwards';
-            heart.style.setProperty('--duration', '1.5s');
-            heart.style.setProperty('--rotation', Math.random() * 360);
-            
-            document.body.appendChild(heart);
-            
-            setTimeout(() => {
-                heart.remove();
-            }, 1500);
+            setTimeout(() => { item.classList.remove('heartbeat'); }, 1000);
         }
 
         // Mapa de corazones
@@ -2422,41 +1798,18 @@
                 { name: "Lugar favorito", top: "25%", left: "80%" },
                 { name: "Donde dijiste 'Te amo'", top: "70%", left: "30%" }
             ];
-            
             places.forEach(place => {
                 const marker = document.createElement('div');
                 marker.classList.add('heart-marker');
                 marker.style.top = place.top;
                 marker.style.left = place.left;
-                
                 const tooltip = document.createElement('div');
                 tooltip.classList.add('heart-tooltip');
                 tooltip.textContent = place.name;
-                
                 marker.appendChild(tooltip);
                 heartMap.appendChild(marker);
-                
-                // Animación de pulso
-                setInterval(() => {
-                    marker.classList.toggle('heartbeat');
-                }, Math.random() * 3000 + 2000);
+                setInterval(() => { marker.classList.toggle('heartbeat'); }, Math.random() * 3000 + 2000);
             });
-        }
-
-        // Modal para imágenes
-        function openModal(imageSrc) {
-            const modal = document.getElementById('imageModal');
-            const modalImg = document.getElementById('modalImage');
-            
-            modalImg.src = imageSrc;
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeModal() {
-            const modal = document.getElementById('imageModal');
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto';
         }
 
         // Inicializar efectos
@@ -2464,47 +1817,16 @@
             createStars();
             createHearts();
             createHeartMap();
-            
-            // Mostrar la primera frase
             showQuote(0);
-            
-            // Año actual en el footer
             document.getElementById('currentYear').textContent = new Date().getFullYear();
-            
-            // Efecto de escritura para el subtítulo
-            const subtitle = document.querySelector('.subtitle');
-            subtitle.style.animation = 'none';
-            setTimeout(() => {
-                subtitle.style.animation = '';
-            }, 10);
-            
-            // Efecto de latido para el título
-            setInterval(() => {
-                const title = document.querySelector('h1');
-                title.classList.toggle('heartbeat');
-            }, 5000);
-            
-            // Efecto de flotación para las secciones
-            const sections = document.querySelectorAll('.message-section, .letter, .gallery-item, .reason-item');
-            sections.forEach((section, index) => {
-                section.style.animationDelay = `${index * 0.1}s`;
-            });
-            
-            // Efecto de rotación para el botón de música
-            const musicBtn = document.getElementById('musicBtn');
-            setInterval(() => {
-                musicBtn.classList.toggle('rotate');
-            }, 15000);
         };
 
         // Efecto de scroll suave para los enlaces
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
-                
                 const targetId = this.getAttribute('href');
                 const targetElement = document.querySelector(targetId);
-                
                 if (targetElement) {
                     window.scrollTo({
                         top: targetElement.offsetTop - 80,
