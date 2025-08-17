@@ -564,7 +564,26 @@
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         });
 
+        // --- INICIALIZACIÓN ---
         init3D();
+        
+        // --- LÓGICA DEL REPRODUCTOR DE MÚSICA ---
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const playIcon = document.getElementById('play-icon');
+        const pauseIcon = document.getElementById('pause-icon');
+        
+        playPauseBtn.addEventListener('click', () => {
+            if (backgroundMusic.paused) {
+                backgroundMusic.play();
+                playIcon.classList.add('hidden');
+                pauseIcon.classList.remove('hidden');
+            } else {
+                backgroundMusic.pause();
+                playIcon.classList.remove('hidden');
+                pauseIcon.classList.add('hidden');
+            }
+        });
+
     </script>
 </body>
 </html>
