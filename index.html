@@ -213,7 +213,7 @@
         import * as THREE from 'three';
 
         // --- CONFIGURACIÓN 3D ---
-        let camera, scene, renderer, stars, heartMesh;
+        let camera, scene, renderer, stars, figuresGroup;
         const mouse = new THREE.Vector2();
         const orientation = { beta: 0, gamma: 0 };
 
@@ -225,7 +225,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-            createHeart();
+            createFigures();
             createParticles();
 
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
@@ -237,24 +237,42 @@
             animate();
         }
 
-        function createHeart() {
-            const shape = new THREE.Shape();
-            const x = -2.5, y = -5;
-            shape.moveTo(x + 2.5, y + 2.5);
-            shape.bezierCurveTo(x + 2.5, y + 2.5, x + 2, y, x, y);
-            shape.bezierCurveTo(x - 3, y, x - 3, y + 3.5, x - 3, y + 3.5);
-            shape.bezierCurveTo(x - 3, y + 5.5, x - 1.5, y + 7.7, x + 2.5, y + 9.5);
-            shape.bezierCurveTo(x + 6, y + 7.7, x + 8, y + 5.5, x + 8, y + 3.5);
-            shape.bezierCurveTo(x + 8, y + 3.5, x + 8, y, x + 5, y);
-            shape.bezierCurveTo(x + 3.5, y, x + 2.5, y + 2.5, x + 2.5, y + 2.5);
+        function createFigures() {
+            figuresGroup = new THREE.Group();
+            
+            const material1 = new THREE.MeshStandardMaterial({ color: 0xff4f81, metalness: 0.3, roughness: 0.4 });
+            const material2 = new THREE.MeshStandardMaterial({ color: 0x87CEEB, metalness: 0.3, roughness: 0.4 });
 
-            const extrudeSettings = { depth: 1, bevelEnabled: true, bevelThickness: 0.5, bevelSize: 0.5, bevelSegments: 2 };
-            const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-            geometry.center();
-            const material = new THREE.MeshStandardMaterial({ color: 0xff4f81, metalness: 0.3, roughness: 0.4 });
-            heartMesh = new THREE.Mesh(geometry, material);
-            heartMesh.scale.set(0.1, 0.1, 0.1);
-            scene.add(heartMesh);
+            // Figura 1 (Jirafa)
+            const body1 = new THREE.Mesh(new THREE.ConeGeometry(0.5, 2.5, 16), material1);
+            body1.position.y = -0.5;
+            const head1 = new THREE.Mesh(new THREE.SphereGeometry(0.4, 16, 16), material1);
+            head1.position.y = 1.2;
+            const figure1 = new THREE.Group();
+            figure1.add(body1, head1);
+            figure1.position.x = -1.2;
+
+            // Figura 2 (Pinguina)
+            const body2 = new THREE.Mesh(new THREE.ConeGeometry(0.4, 1.8, 16), material2);
+            body2.position.y = -0.8;
+            const head2 = new THREE.Mesh(new THREE.SphereGeometry(0.3, 16, 16), material2);
+            head2.position.y = 0.5;
+            const figure2 = new THREE.Group();
+            figure2.add(body2, head2);
+            figure2.position.x = 1.2;
+
+            // Vínculo de luz
+            const curve = new THREE.CatmullRomCurve3([
+                new THREE.Vector3(-0.5, 0, 0),
+                new THREE.Vector3(0, 0.3, 0),
+                new THREE.Vector3(0.5, 0, 0)
+            ]);
+            const tubeGeo = new THREE.TubeGeometry(curve, 20, 0.05, 8, false);
+            const tubeMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.8 });
+            const link = new THREE.Mesh(tubeGeo, tubeMat);
+
+            figuresGroup.add(figure1, figure2, link);
+            scene.add(figuresGroup);
         }
 
         function createParticles() {
@@ -273,9 +291,9 @@
         const clock = new THREE.Clock();
         function animate() {
             const elapsedTime = clock.getElapsedTime();
-            if (heartMesh) {
-                heartMesh.rotation.y = elapsedTime * 0.2;
-                heartMesh.position.y = Math.sin(elapsedTime * 0.7) * 0.1;
+            if (figuresGroup) {
+                figuresGroup.rotation.y = elapsedTime * 0.2;
+                figuresGroup.position.y = Math.sin(elapsedTime * 0.7) * 0.1;
             }
             if (stars) {
                 stars.rotation.y = elapsedTime * 0.05;
@@ -520,7 +538,13 @@
           
           const newHeartColor = isDark ? 0x60a5fa : 0xff4f81;
           const newParticleColor = isDark ? 0x93c5fd : 0xffffff;
-          heartMesh.material.color.setHex(newHeartColor);
+          figuresGroup.children.forEach(child => {
+            if(child.type === "Group") { // Figures
+                child.children.forEach(part => part.material.color.setHex(newHeartColor));
+            } else { // Link
+                child.material.color.setHex(isDark ? 0x60a5fa : 0xffffff);
+            }
+          });
           stars.material.color.setHex(newParticleColor);
           
           body.classList.toggle('bg-gray-900', !isDark);
