@@ -43,23 +43,36 @@
             font-family: 'Lobster', cursive;
         }
 
-        /* Animación para la aparición de la bomba */
-        @keyframes pop-in {
+        /* Animación de la explosión */
+        @keyframes explode-in {
             0% {
                 transform: scale(0);
                 opacity: 0;
             }
-            70% {
-                transform: scale(1.1);
+            60% {
+                transform: scale(1.1) rotate(-3deg);
                 opacity: 1;
             }
+            80% {
+                transform: scale(0.95) rotate(3deg);
+            }
             100% {
-                transform: scale(1);
+                transform: scale(1) rotate(0deg);
             }
         }
 
-        .animate-pop-in {
-            animation: pop-in 0.8s ease-out forwards;
+        .animate-explode-in {
+            animation: explode-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        
+        /* Animación de temblor de pantalla */
+        @keyframes screen-shake {
+            0%, 100% { transform: translate(0, 0); }
+            10%, 30%, 50%, 70%, 90% { transform: translate(-3px, 3px); }
+            20%, 40%, 60%, 80% { transform: translate(3px, -3px); }
+        }
+        .animate-screen-shake {
+            animation: screen-shake 0.3s ease-in-out;
         }
 
         /* Animación para la mecha de la bomba */
@@ -80,13 +93,35 @@
             animation: sparkle 1s infinite;
         }
         
-        /* Animación de confeti */
+        /* Animación del ESTALLIDO de confeti */
+        @keyframes confetti-burst {
+            0% {
+                transform: translate(0, 0) rotate(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) rotate(var(--r)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .confetti-burst-particle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+            animation: confetti-burst 1.2s ease-out forwards;
+        }
+
+        /* Animación de la LLUVIA de confeti */
         @keyframes confetti-fall {
             0% { transform: translateY(-100vh) rotate(0deg); }
             100% { transform: translateY(100vh) rotate(720deg); }
         }
 
-        .confetti {
+        .confetti-fall-particle {
             position: absolute;
             top: 0;
             left: 0;
@@ -130,7 +165,7 @@
 
             <div class="flex flex-col md:flex-row items-center justify-center text-center p-4">
                 <!-- La Bomba -->
-                <div class="relative animate-pop-in">
+                <div class="relative animate-explode-in">
                     <!-- Mecha de la bomba -->
                     <div class="absolute -top-8 left-1/2 -translate-x-1/2 w-14 h-10 rounded-full border-t-4 border-r-4 border-gray-600 transform -rotate-45" style="border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-top-right-radius: 40px; border-top-left-radius: 0; border-color: transparent transparent transparent #4a5568;"></div>
                     <div class="absolute -top-12 left-1/2 ml-4 w-3 h-3 bg-yellow-200 rounded-full animate-sparkle"></div>
@@ -144,7 +179,7 @@
                 </div>
                 
                 <!-- Pinguino con Corazón -->
-                <div class="animate-pop-in w-32 h-40 sm:w-36 sm:h-44 md:w-40 md:h-52 mt-4 md:mt-0 md:ml-8" style="animation-delay: 0.2s;">
+                <div class="animate-explode-in w-32 h-40 sm:w-36 sm:h-44 md:w-40 md:h-52 mt-4 md:mt-0 md:ml-8" style="animation-delay: 0.1s;">
                     <svg viewBox="0 0 160 200" class="w-full h-full drop-shadow-lg">
                         <!-- Aletas del pinguino -->
                         <path d="M25,120 C-10,140 20,180 35,160 Z" fill="#4a5568" />
@@ -179,28 +214,70 @@
         const loader = document.getElementById('loader');
         const birthdayContent = document.getElementById('birthday-content');
         const confettiContainer = document.getElementById('confetti-container');
+        const colors = ['bg-pink-500', 'bg-yellow-400', 'bg-green-400', 'bg-blue-500', 'bg-purple-500', 'bg-red-500'];
 
-        function createConfetti() {
-            const colors = ['bg-pink-500', 'bg-yellow-400', 'bg-green-400', 'bg-blue-500', 'bg-purple-500', 'bg-red-500'];
-            for (let i = 0; i < 50; i++) {
+        function createConfettiBurst() {
+            const confettiCount = 100;
+            const fragment = document.createDocumentFragment();
+
+            for (let i = 0; i < confettiCount; i++) {
                 const confetti = document.createElement('div');
                 const randomColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.className = `confetti ${randomColor}`;
+                
+                confetti.className = `confetti-burst-particle ${randomColor}`;
+                
+                const angle = Math.random() * 360;
+                const radius = Math.random() * (Math.min(window.innerWidth, window.innerHeight) / 2);
+                
+                const tx = Math.cos(angle * Math.PI / 180) * radius;
+                const ty = Math.sin(angle * Math.PI / 180) * radius;
+                const r = Math.random() * 720; // Rotación
+
+                confetti.style.setProperty('--tx', `${tx}px`);
+                confetti.style.setProperty('--ty', `${ty}px`);
+                confetti.style.setProperty('--r', `${r}deg`);
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                
+                fragment.appendChild(confetti);
+            }
+            confettiContainer.appendChild(fragment);
+        }
+
+        function createFallingConfetti() {
+            const confettiCount = 50;
+             const fragment = document.createDocumentFragment();
+
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.className = `confetti-fall-particle ${randomColor}`;
                 confetti.style.left = `${Math.random() * 100}vw`;
                 confetti.style.animationDelay = `${Math.random() * 8}s`;
-                confetti.style.width = `${Math.floor(Math.random() * 8) + 8}px`;
+                confetti.style.width = `${Math.floor(Math.random() * 6) + 8}px`;
                 confetti.style.height = confetti.style.width;
                 confetti.style.borderRadius = '50%';
-                confettiContainer.appendChild(confetti);
+                fragment.appendChild(confetti);
             }
+            confettiContainer.appendChild(fragment);
         }
         
+        function showBirthdaySurprise() {
+             // Efecto de temblor
+            document.body.classList.add('animate-screen-shake');
+            setTimeout(() => {
+                document.body.classList.remove('animate-screen-shake');
+            }, 300);
+
+            createConfettiBurst();
+            setTimeout(createFallingConfetti, 500); // La lluvia empieza poco después de la explosión
+        }
+
         setTimeout(() => {
             loader.classList.add('opacity-0');
             setTimeout(() => {
                 loader.classList.add('hidden');
                 birthdayContent.classList.remove('hidden');
-                createConfetti();
+                showBirthdaySurprise();
             }, 500);
         }, 8000);
 
@@ -237,6 +314,8 @@
             // Event Listeners
             window.addEventListener('resize', onWindowResize);
             document.addEventListener('mousemove', onMouseMove);
+            window.addEventListener('deviceorientation', onDeviceOrientation, true);
+
 
             animate();
         }
@@ -268,11 +347,29 @@
             mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
         }
 
+        function onDeviceOrientation(event) {
+            // event.gamma es la inclinación de izquierda a derecha en grados, rango [-90, 90]
+            // event.beta es la inclinación de adelante hacia atrás en grados, rango [-180, 180]
+            if (event.gamma === null || event.beta === null) {
+                return;
+            }
+
+            // Limitar los valores para un efecto más suave y menos extremo.
+            const gamma = Math.max(-45, Math.min(45, event.gamma)); // Inclinación izq/der
+            const beta = Math.max(-45, Math.min(45, event.beta));  // Inclinación adelante/atrás
+
+            // Normalizar los valores al rango [-1, 1], similar al movimiento del mouse.
+            mouse.x = gamma / 45;
+            // Invertir beta para que coincida con la dirección del eje Y del mouse
+            mouse.y = -(beta / 45);
+        }
+
         function animate() {
             requestAnimationFrame(animate);
 
             stars.rotation.y += 0.0001;
             
+            // El suavizado hace que la cámara se mueva hacia la posición del mouse/inclinación
             camera.position.x += (mouse.x * 2 - camera.position.x) * 0.02;
             camera.position.y += (-mouse.y * 2 - camera.position.y) * 0.02;
             camera.lookAt(scene.position);
