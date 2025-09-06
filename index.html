@@ -1,612 +1,290 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Ti ❤️ Nuestro Universo</title>
-    
-    <!-- Tailwind CSS -->
+    <title>¡Una Sorpresa para Ti!</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Three.js para 3D -->
-    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js",
-                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/"
-            }
-        }
-    </script>
-
-    <!-- Google Fonts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Poppins', sans-serif; }
-        .font-title { font-family: 'Dancing Script', cursive; }
-        
-        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
-
-        /* Animaciones */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; /* Evita el scroll durante las animaciones */
+            margin: 0;
         }
-        .fade-in { animation: fadeIn 1s ease-out forwards; }
-        
-        .moment-card { transform-style: preserve-3d; transition: transform 0.8s; }
-        .moment-card.flipped { transform: rotateY(180deg); }
-        .moment-card-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-        .moment-card-back { transform: rotateY(180deg); }
 
-        .heart-particle {
-            position: fixed; font-size: 1.5rem; color: #ff69b4;
-            pointer-events: none; opacity: 1; animation: fade-out-up 1.5s ease-out forwards;
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
         }
-        @keyframes fade-out-up { to { transform: translateY(-100px); opacity: 0; } }
 
-        /* Animación del muñeco de nieve */
-        #snowman-left-arm { animation: wave-left 2s ease-in-out infinite alternate; }
-        #snowman-right-arm { animation: wave-right 2s ease-in-out infinite alternate; }
-        @keyframes wave-left { from { transform: rotate(0deg); } to { transform: rotate(-15deg); } }
-        @keyframes wave-right { from { transform: rotate(0deg); } to { transform: rotate(15deg); } }
+        .content-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-        /* Scrollbar personalizado */
-        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 105, 180, 0.6); border-radius: 10px; }
-        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(96, 165, 250, 0.6); }
+        #birthday-content.hidden {
+            display: none;
+        }
 
-        /* Transiciones de color */
-        body, .bg-gray-900, .bg-gray-800 { transition: background-color 0.5s ease; }
-        .text-pink-300, .text-gray-300, .text-white { transition: color 0.5s ease; }
+        .font-lobster {
+            font-family: 'Lobster', cursive;
+        }
+
+        /* Animación para la aparición de la bomba */
+        @keyframes pop-in {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            70% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .animate-pop-in {
+            animation: pop-in 0.8s ease-out forwards;
+        }
+
+        /* Animación para la mecha de la bomba */
+        @keyframes sparkle {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+                background-color: #fef08a; /* yellow-200 */
+            }
+            50% {
+                transform: scale(1.5);
+                opacity: 0.5;
+                background-color: #fca5a5; /* red-300 */
+            }
+        }
+
+        .animate-sparkle {
+            animation: sparkle 1s infinite;
+        }
         
-        /* --- ESTILOS RESPONSIVOS --- */
-        @media (max-width: 768px) {
-            #time-together-display {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            #main-content {
-                padding-bottom: 8rem; /* Espacio para que no se solape con los popups */
-            }
+        /* Animación de confeti */
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100vh) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(720deg); }
+        }
+
+        .confetti {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 12px;
+            height: 12px;
+            opacity: 0.8;
+            animation: confetti-fall 8s linear infinite;
+        }
+
+        /* Animación para el corazón del pinguino */
+        @keyframes pulse-heart {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        .animate-pulse-heart {
+            animation: pulse-heart 2s infinite ease-in-out;
+            transform-origin: center;
         }
     </style>
 </head>
-<body class="bg-gray-900 text-white overflow-x-hidden">
+<body class="bg-gray-900">
 
-    <div id="preloader"><div class="loader-heart">❤️</div><div class="loader-text">Cargando nuestro universo...</div></div>
-    <div id="custom-cursor"></div>
+    <!-- Canvas para el fondo 3D -->
     <canvas id="bg-canvas"></canvas>
-    
-    <!-- Audio para la página -->
-    <audio id="background-music" loop src="https://www.bensound.com/bensound-music/bensound-love.mp3"></audio>
 
-    <main id="main-content" class="relative min-h-screen flex flex-col items-center justify-center p-4">
-        
-        <div class="text-center z-10 p-6 max-w-2xl w-full">
-            <h1 id="main-title" class="font-title text-6xl md:text-8xl text-pink-300 drop-shadow-lg fade-in" style="animation-delay: 200ms;">Jirafa y Pinguina</h1>
-            <p id="main-subtitle" class="mt-4 text-lg md:text-xl text-gray-300 fade-in" style="animation-delay: 400ms;">Una pequeña carta para recordarte lo mucho que te pienso...</p>
-
-            <div class="mt-8 flex flex-wrap justify-center gap-4 fade-in" style="animation-delay: 600ms;">
-                <button onclick="showLetter()" class="group relative inline-flex items-center justify-center px-6 py-3 bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-full shadow-lg transition-transform transform hover:scale-105 duration-300">
-                    <svg class="w-5 h-5 mr-2 -ml-1 transition-transform group-hover:rotate-[-5deg]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 18H4V8L12 13L20 8V18ZM12 11L4 6H20L12 11Z"/></svg>
-                    Abrir Carta
-                </button>
-                <button onclick="toggleTheme()" class="group relative inline-flex items-center justify-center px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-full shadow-lg transition-transform transform hover:scale-105 duration-300">
-                    <svg id="theme-icon" class="w-5 h-5 mr-2 -ml-1 transition-transform group-hover:rotate-[15deg]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.106a.75.75 0 010 1.06l-1.591 1.59a.75.75 0 11-1.06-1.06l1.59-1.59a.75.75 0 011.06 0zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5h2.25a.75.75 0 01.75.75zM17.836 17.836a.75.75 0 01-1.06 0l-1.59-1.591a.75.75 0 111.06-1.06l1.59 1.59a.75.75 0 010 1.06zM12 21.75a.75.75 0 01-.75-.75v-2.25a.75.75 0 011.5 0v2.25a.75.75 0 01-.75-.75zM5.164 17.836a.75.75 0 010-1.06l1.59-1.591a.75.75 0 111.06 1.06l-1.59 1.59a.75.75 0 01-1.06 0zM3 12a.75.75 0 01.75-.75h2.25a.75.75 0 010 1.5H3.75A.75.75 0 013 12zM6.106 5.106a.75.75 0 011.06 0l1.591 1.59a.75.75 0 01-1.06 1.06l-1.59-1.591a.75.75 0 010-1.06z"/></svg>
-                    <span id="theme-text">Modo Claro</span>
-                </button>
-            </div>
-        </div>
-
-        <section class="z-10 mt-16 w-full max-w-4xl fade-in" style="animation-delay: 800ms;">
-            <h2 class="font-title text-4xl text-center text-pink-300 mb-8">Tiempo Juntos</h2>
-            <div id="time-together-display" class="grid grid-cols-2 md:grid-cols-6 gap-4 text-center">
-                <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg"><div id="years" class="text-3xl md:text-4xl font-bold text-pink-400">0</div><div class="text-sm text-gray-300">Años</div></div>
-                <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg"><div id="months" class="text-3xl md:text-4xl font-bold text-pink-400">0</div><div class="text-sm text-gray-300">Meses</div></div>
-                <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg"><div id="days" class="text-3xl md:text-4xl font-bold text-pink-400">0</div><div class="text-sm text-gray-300">Días</div></div>
-                <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg"><div id="hours" class="text-3xl md:text-4xl font-bold text-pink-400">0</div><div class="text-sm text-gray-300">Horas</div></div>
-                <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg"><div id="minutes" class="text-3xl md:text-4xl font-bold text-pink-400">0</div><div class="text-sm text-gray-300">Minutos</div></div>
-                <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg"><div id="seconds" class="text-3xl md:text-4xl font-bold text-pink-400">0</div><div class="text-sm text-gray-300">Segundos</div></div>
-            </div>
-        </section>
-
-        <section class="z-10 mt-16 w-full max-w-4xl fade-in" style="animation-delay: 1000ms;">
-            <h2 class="font-title text-4xl text-center text-pink-300 mb-8">Nuestro Calendario de Momentos</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="moment-card h-48" onmouseenter="this.classList.add('flipped')" onmouseleave="this.classList.remove('flipped')">
-                    <div class="moment-card-face absolute w-full h-full bg-gray-800 bg-opacity-70 backdrop-blur-sm rounded-lg p-6 text-center flex flex-col justify-center items-center border border-gray-700">
-                        <div class="text-5xl mb-2">🗓️</div><p class="font-semibold">Nuestra Primera Cita</p>
-                    </div>
-                    <div class="moment-card-back absolute w-full h-full bg-pink-400 bg-opacity-80 backdrop-blur-sm rounded-lg p-6 text-center flex flex-col justify-center items-center border border-pink-300">
-                        <p class="text-white font-semibold">"Ese día, el mundo se detuvo solo para nosotros dos."</p>
-                    </div>
-                </div>
-                <div class="moment-card h-48" onmouseenter="this.classList.add('flipped')" onmouseleave="this.classList.remove('flipped')">
-                    <div class="moment-card-face absolute w-full h-full bg-gray-800 bg-opacity-70 backdrop-blur-sm rounded-lg p-6 text-center flex flex-col justify-center items-center border border-gray-700">
-                        <div class="text-5xl mb-2">💌</div><p class="font-semibold">El Primer "Te Amo"</p>
-                    </div>
-                    <div class="moment-card-back absolute w-full h-full bg-blue-400 bg-opacity-80 backdrop-blur-sm rounded-lg p-6 text-center flex flex-col justify-center items-center border border-blue-300">
-                        <p class="text-white font-semibold">"Dos palabras que cambiaron nuestro universo para siempre."</p>
-                    </div>
-                </div>
-                <div class="moment-card h-48" onmouseenter="this.classList.add('flipped')" onmouseleave="this.classList.remove('flipped')">
-                     <div class="moment-card-face absolute w-full h-full bg-gray-800 bg-opacity-70 backdrop-blur-sm rounded-lg p-6 text-center flex flex-col justify-center items-center border border-gray-700">
-                        <div class="text-5xl mb-2">✈️</div><p class="font-semibold">Nuestro Primer Viaje</p>
-                    </div>
-                    <div class="moment-card-back absolute w-full h-full bg-purple-400 bg-opacity-80 backdrop-blur-sm rounded-lg p-6 text-center flex flex-col justify-center items-center border border-purple-300">
-                        <p class="text-white font-semibold">"Creando recuerdos que durarán toda una vida."</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-    
-    <!-- BOTÓN DE MÚSICA -->
-    <div id="music-player" class="fixed bottom-4 right-4 z-50">
-        <button id="play-pause-btn" class="w-14 h-14 flex items-center justify-center bg-pink-500 rounded-full text-white shadow-lg transform transition-transform hover:scale-110">
-            <svg id="play-icon" class="w-6 h-6 ml-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-            <svg id="pause-icon" class="w-6 h-6 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-        </button>
-    </div>
-
-    <!-- POPUP DE LA CARTA -->
-    <div id="letter-popup" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-lg flex items-center justify-center p-4 z-50 hidden opacity-0 transition-opacity duration-300">
-        <div id="letter-card" class="bg-gray-800 bg-opacity-80 border border-gray-700 rounded-2xl shadow-2xl max-w-2xl w-full text-white transform scale-95 transition-all duration-300">
-            <div class="p-6 md:p-8">
-                <h2 id="letter-title" class="font-title text-4xl text-center text-pink-300 mb-6">Mi Carta para Ti</h2>
-                <div id="letter-content" class="custom-scrollbar text-left text-gray-300 leading-relaxed max-h-[50vh] overflow-y-auto pr-4"></div>
-            </div>
-            <div class="px-6 pb-6 flex justify-between items-center">
-                <button onclick="closeLetter()" class="text-gray-400 hover:text-white transition-colors">Cerrar</button>
-                <button id="next-button" onclick="nextPart()" class="px-5 py-2 bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-full shadow-lg transition-transform transform hover:scale-105 duration-300">Siguiente</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- POPUP DE LA SEGUNDA CARTA -->
-    <div id="final-message-popup" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-lg flex items-center justify-center p-4 z-50 hidden opacity-0 transition-opacity duration-300">
-        <div class="bg-gray-800 bg-opacity-80 border border-gray-700 rounded-2xl shadow-2xl max-w-2xl w-full text-white transform scale-95 transition-all duration-300">
-            <div class="p-6 md:p-8">
-                <h2 id="final-letter-title" class="font-title text-4xl text-center text-pink-300 mb-6">Espera, algo más...</h2>
-                <div id="final-letter-content" class="custom-scrollbar text-left text-gray-300 leading-relaxed max-h-[50vh] overflow-y-auto pr-4"></div>
-            </div>
-            <div class="px-6 pb-6 flex justify-end items-center">
-                <button onclick="closeFinalMessage()" class="px-5 py-2 bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-full shadow-lg transition-transform transform hover:scale-105 duration-300">Entendido</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- POPUP DEL MUÑECO DE NIEVE -->
-    <div id="snowman-popup" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-lg flex items-center justify-center p-4 z-50 hidden opacity-0 transition-opacity duration-300">
-        <div class="bg-gray-800 bg-opacity-80 border border-gray-700 rounded-2xl shadow-2xl max-w-lg w-full text-center p-8 text-white transform scale-95 transition-all duration-300">
-            <svg id="snowman" class="w-32 h-32 mx-auto mb-4" viewBox="0 0 100 100">
-                <circle cx="50" cy="30" r="15" fill="white"/>
-                <circle cx="50" cy="65" r="25" fill="white"/>
-                <circle cx="45" cy="28" r="2" fill="black"/>
-                <circle cx="55" cy="28" r="2" fill="black"/>
-                <polygon points="50,32 52,35 48,35" fill="orange"/>
-                <g id="snowman-arms" style="transform-origin: 50% 50%;">
-                    <path id="snowman-left-arm" d="M 25 60 Q 10 50 20 40" stroke="brown" stroke-width="3" fill="none" />
-                    <path id="snowman-right-arm" d="M 75 60 Q 90 50 80 40" stroke="brown" stroke-width="3" fill="none" />
-                </g>
+    <!-- Contenedor para el contenido superpuesto -->
+    <div class="content-container">
+        <!-- Pantalla de Carga -->
+        <div id="loader" class="flex flex-col items-center justify-center text-center text-white transition-opacity duration-500">
+            <svg class="animate-spin h-12 w-12 text-pink-400 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            <p id="snowman-text" class="text-lg text-gray-200 leading-relaxed"></p>
-            <button onclick="closeSnowmanPopup()" class="mt-6 px-5 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-full shadow-lg transition-transform transform hover:scale-105 duration-300">Cerrar</button>
+            <p class="text-xl font-lobster tracking-wider">Cargando sorpresa...</p>
+        </div>
+
+        <!-- Contenido de Cumpleaños (inicialmente oculto) -->
+        <div id="birthday-content" class="hidden">
+            <!-- Contenedor del confeti -->
+            <div id="confetti-container" class="absolute inset-0 pointer-events-none"></div>
+
+            <div class="flex flex-col md:flex-row items-center justify-center text-center p-4">
+                <!-- La Bomba -->
+                <div class="relative animate-pop-in">
+                    <!-- Mecha de la bomba -->
+                    <div class="absolute -top-8 left-1/2 -translate-x-1/2 w-14 h-10 rounded-full border-t-4 border-r-4 border-gray-600 transform -rotate-45" style="border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-top-right-radius: 40px; border-top-left-radius: 0; border-color: transparent transparent transparent #4a5568;"></div>
+                    <div class="absolute -top-12 left-1/2 ml-4 w-3 h-3 bg-yellow-200 rounded-full animate-sparkle"></div>
+                    
+                    <!-- Cuerpo de la bomba -->
+                    <div class="w-60 h-60 sm:w-72 sm:h-72 md:w-80 md:h-80 bg-gray-800 rounded-full flex flex-col items-center justify-center shadow-2xl border-4 border-gray-700 p-4 sm:p-6">
+                        <h1 class="font-lobster text-4xl sm:text-5xl md:text-6xl text-pink-400 drop-shadow-lg">¡Feliz Cumpleaños!</h1>
+                        <p class="text-white mt-4 text-base sm:text-lg md:text-xl">Espero que la pases bien y disfruta este feliz cumpleaños, te quiero :3</p>
+                        <p class="text-gray-400 mt-6 text-base md:text-lg">- att: Pinguino 🐧</p>
+                    </div>
+                </div>
+                
+                <!-- Pinguino con Corazón -->
+                <div class="animate-pop-in w-32 h-40 sm:w-36 sm:h-44 md:w-40 md:h-52 mt-4 md:mt-0 md:ml-8" style="animation-delay: 0.2s;">
+                    <svg viewBox="0 0 160 200" class="w-full h-full drop-shadow-lg">
+                        <!-- Aletas del pinguino -->
+                        <path d="M25,120 C-10,140 20,180 35,160 Z" fill="#4a5568" />
+                        <path d="M135,120 C170,140 140,180 125,160 Z" fill="#4a5568" />
+                        
+                        <!-- Cuerpo -->
+                        <ellipse cx="80" cy="135" rx="55" ry="65" fill="#2d3748" />
+                        <!-- Panza -->
+                        <ellipse cx="80" cy="140" rx="40" ry="55" fill="white" />
+                        
+                        <!-- Ojos -->
+                        <circle cx="65" cy="100" r="7" fill="black" />
+                        <circle cx="95" cy="100" r="7" fill="black" />
+                        <circle cx="63" cy="98" r="2" fill="white" />
+                        <circle cx="93" cy="98" r="2" fill="white" />
+                        
+                        <!-- Pico -->
+                        <path d="M80 110 L90 120 L70 120 Z" fill="#f6ad55" />
+                        
+                        <!-- Corazón -->
+                        <g class="animate-pulse-heart">
+                            <path d="M80 65 C 60 45, 45 60, 80 90 C 115 60, 100 45, 80 65 Z" fill="#ef4444" stroke="#c53030" stroke-width="2"/>
+                        </g>
+                    </svg>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- MENSAJE DE OPINIÓN FINAL -->
-    <div id="opinion-popup" class="fixed inset-0 flex items-center justify-center pointer-events-none z-50 opacity-0 transition-opacity duration-500">
-        <div class="bg-gray-800 bg-opacity-80 backdrop-blur-sm p-4 rounded-2xl shadow-2xl flex items-center gap-4">
-            <span class="text-4xl">❤️</span>
-            <p class="text-white">gracias por leer me darias tu linda opinion jiji :3</p>
-        </div>
-    </div>
+    <script>
+        // --- Lógica del cargador y confeti ---
+        const loader = document.getElementById('loader');
+        const birthdayContent = document.getElementById('birthday-content');
+        const confettiContainer = document.getElementById('confetti-container');
 
+        function createConfetti() {
+            const colors = ['bg-pink-500', 'bg-yellow-400', 'bg-green-400', 'bg-blue-500', 'bg-purple-500', 'bg-red-500'];
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.className = `confetti ${randomColor}`;
+                confetti.style.left = `${Math.random() * 100}vw`;
+                confetti.style.animationDelay = `${Math.random() * 8}s`;
+                confetti.style.width = `${Math.floor(Math.random() * 8) + 8}px`;
+                confetti.style.height = confetti.style.width;
+                confetti.style.borderRadius = '50%';
+                confettiContainer.appendChild(confetti);
+            }
+        }
+        
+        setTimeout(() => {
+            loader.classList.add('opacity-0');
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                birthdayContent.classList.remove('hidden');
+                createConfetti();
+            }, 500);
+        }, 8000);
 
-    <script type="module">
-        import * as THREE from 'three';
-
-        // --- CONFIGURACIÓN 3D ---
-        let camera, scene, renderer, stars, figuresGroup;
-        const mouse = new THREE.Vector2();
-        const orientation = { beta: 0, gamma: 0 };
+        // --- Lógica del fondo 3D con Three.js ---
+        let scene, camera, renderer, stars;
+        const mouse = { x: 0, y: 0 };
 
         function init3D() {
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.z = 5;
+            // Escena
             scene = new THREE.Scene();
-            renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), alpha: true });
+            
+            // Cámara
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 4;
+
+            // Renderer
+            const canvas = document.getElementById('bg-canvas');
+            renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+            renderer.setClearColor(0x000000, 0); // Fondo transparente
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.setPixelRatio(window.devicePixelRatio);
 
-            createFigures();
-            createParticles();
-
+            // Luces
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
             scene.add(ambientLight);
             const pointLight = new THREE.PointLight(0xffffff, 1);
             pointLight.position.set(5, 5, 5);
             scene.add(pointLight);
 
+            // Partículas (Estrellas)
+            stars = createStars();
+            scene.add(stars);
+
+            // Event Listeners
+            window.addEventListener('resize', onWindowResize);
+            document.addEventListener('mousemove', onMouseMove);
+
             animate();
         }
 
-        function createFigures() {
-            figuresGroup = new THREE.Group();
-            
-            const material1 = new THREE.MeshStandardMaterial({ color: 0xff4f81, metalness: 0.3, roughness: 0.4 });
-            const material2 = new THREE.MeshStandardMaterial({ color: 0x87CEEB, metalness: 0.3, roughness: 0.4 });
-
-            // Figura 1 (Jirafa)
-            const body1 = new THREE.Mesh(new THREE.ConeGeometry(0.5, 2.5, 16), material1);
-            body1.position.y = -0.5;
-            const head1 = new THREE.Mesh(new THREE.SphereGeometry(0.4, 16, 16), material1);
-            head1.position.y = 1.2;
-            const figure1 = new THREE.Group();
-            figure1.add(body1, head1);
-            figure1.position.x = -1.2;
-
-            // Figura 2 (Pinguina)
-            const body2 = new THREE.Mesh(new THREE.ConeGeometry(0.4, 1.8, 16), material2);
-            body2.position.y = -0.8;
-            const head2 = new THREE.Mesh(new THREE.SphereGeometry(0.3, 16, 16), material2);
-            head2.position.y = 0.5;
-            const figure2 = new THREE.Group();
-            figure2.add(body2, head2);
-            figure2.position.x = 1.2;
-
-            // Vínculo de luz
-            const curve = new THREE.CatmullRomCurve3([
-                new THREE.Vector3(-0.5, 0, 0),
-                new THREE.Vector3(0, 0.3, 0),
-                new THREE.Vector3(0.5, 0, 0)
-            ]);
-            const tubeGeo = new THREE.TubeGeometry(curve, 20, 0.05, 8, false);
-            const tubeMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.8 });
-            const link = new THREE.Mesh(tubeGeo, tubeMat);
-
-            figuresGroup.add(figure1, figure2, link);
-            scene.add(figuresGroup);
-        }
-
-        function createParticles() {
-            const particlesGeometry = new THREE.BufferGeometry;
-            const count = 5000;
-            const positions = new Float32Array(count * 3);
-            for (let i = 0; i < count * 3; i++) {
-                positions[i] = (Math.random() - 0.5) * 20;
+        function createStars() {
+            const starGeometry = new THREE.BufferGeometry();
+            const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.02 });
+            const starVertices = [];
+            for (let i = 0; i < 10000; i++) {
+                const x = (Math.random() - 0.5) * 2000;
+                const y = (Math.random() - 0.5) * 2000;
+                const z = (Math.random() - 0.5) * 2000;
+                if (Math.sqrt(x*x + y*y + z*z) > 20) {
+                    starVertices.push(x, y, z);
+                }
             }
-            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            const particlesMaterial = new THREE.PointsMaterial({ size: 0.02, sizeAttenuation: true, color: 0xffffff, transparent: true, opacity: 0.7 });
-            stars = new THREE.Points(particlesGeometry, particlesMaterial);
-            scene.add(stars);
-        }
-        
-        const clock = new THREE.Clock();
-        function animate() {
-            const elapsedTime = clock.getElapsedTime();
-            if (figuresGroup) {
-                figuresGroup.rotation.y = elapsedTime * 0.2;
-                figuresGroup.position.y = Math.sin(elapsedTime * 0.7) * 0.1;
-            }
-            if (stars) {
-                stars.rotation.y = elapsedTime * 0.05;
-            }
-            
-            // Lógica de movimiento para PC y Móvil
-            if (window.matchMedia("(pointer: fine)").matches) {
-                camera.position.x += (mouse.x * 2 - camera.position.x) * 0.05;
-                camera.position.y += (mouse.y * 2 - camera.position.y) * 0.05;
-            } else {
-                const targetX = THREE.MathUtils.mapLinear(orientation.gamma, -90, 90, -2, 2);
-                const targetY = THREE.MathUtils.mapLinear(orientation.beta, -180, 180, -2, 2);
-                camera.position.x += (targetX - camera.position.x) * 0.05;
-                camera.position.y += (targetY - camera.position.y) * 0.05;
-            }
-            
-            camera.lookAt(scene.position);
-            renderer.render(scene, camera);
-            requestAnimationFrame(animate);
+            starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
+            return new THREE.Points(starGeometry, starMaterial);
         }
 
-        // --- MANEJO DE EVENTOS DE MOVIMIENTO ---
-        if (window.matchMedia("(pointer: fine)").matches) {
-            document.addEventListener('mousemove', (event) => {
-                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-                mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-            });
-        }
-        
-        function handleOrientation(event) {
-            orientation.gamma = event.gamma || 0; // Izquierda-Derecha
-            orientation.beta = event.beta || 0;  // Adelante-Atrás
-        }
-        if (window.DeviceOrientationEvent && 'ontouchstart' in window) {
-            window.addEventListener('deviceorientation', handleOrientation);
-        }
-
-        // --- LLUVIA DE CORAZONES AL CLIC ---
-        document.getElementById('main-content').addEventListener('click', (e) => {
-            if (e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.closest('.moment-card')) return;
-
-            for (let i = 0; i < 5; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'heart-particle';
-                particle.innerHTML = '❤️';
-                particle.style.left = `${e.clientX + (Math.random() - 0.5) * 20}px`;
-                particle.style.top = `${e.clientY + (Math.random() - 0.5) * 20}px`;
-                document.body.appendChild(particle);
-                setTimeout(() => particle.remove(), 1500);
-            }
-        });
-        
-        // --- MANEJO DE LA CARTA ---
-        const letterParts = [
-          "Amor,",
-          "No te amo por tu físico, aunque eres hermosa… te amo por todo lo que eres, por esa forma de existir que me tocó el corazón y ya no me dejó ser el mismo.",
-          "Te amo porque, aún con tus silencios, sigues siendo lo más apreciado que tengo.",
-          "Te amo, aunque no lo notes, aunque no me preguntes, aunque no parezca que te importe.",
-          "Sigo aquí, contigo en el alma, pensándote en cada gesto, esperando en cada día una señal tuya que me diga que aún me llevas en ti.",
-          "Si tan solo supieras cuánto me importas, cuánto me haces falta, cuánto daría por tenerte, por no perderte.",
-          "Si tan solo supieras que aún te sigo amando... con todo, a pesar de todo, y contigo, siempre contigo…",
-          "Sé que no soy perfecto, pero quiero ser todo lo que sueñas. Quiero que me digas qué te gusta: qué te hace reír, qué te hace sentir segura. Enséñame cómo amarte de la manera en que quieres ser amada. Tu felicidad significa mucho para mí, y nunca dejaré de intentar ser la persona que te la brinde. Quiero ser quien esté ahí para ti, quien lo haga bien, quien aprenda de sus errores. Siempre estaré dispuesto a crecer, a cambiar y a amarte más profundamente que ayer. Cuéntame tus sueños, tus deseos, tus miedos, y te prometo que estaré aquí. Mereces ser amada de una forma que se sienta bien para ti, y yo estoy aquí, dispuesto a hacer lo que sea necesario para ser esa persona para ti. Así que solo sé que te amo."
-        ];
-        const finalLetterText = [
-            "Hey, espera un momento... tengo que decirte algo, ¿sí? ¿Puedes escuchar?",
-            "Recuerda que eres hermosa, da igual lo que digan el resto. Tu voz, tu sonrisa, tu forma de hablarme, tu forma de reír, tus labios, tus ojos que cuando me miran me hacen saber que no necesito a nadie más.",
-            "¿No ves que tú eres el jardín para mis ojos? ¿No ves en la forma en que te miro? Haces que todo sea lento y lindo.",
-            "Recuerda que tú eres la persona importante en mi vida. Y puedes decir 'es que hay más mujeres mejores que yo'... las demás son las demás y tú eres tú. Y tú eres la razón por la cual te elegí a ti y te escojo a ti, porque eres única y especial en mi vida.",
-            "Solo soy un chico romántico tratando de hacerte saber que me importas más de lo que puedas imaginar. Y gracias por coincidir en mi vida. Te amo :3"
-        ];
-        const snowmanText = "hey pocoyo, eres arte, dulsura, y recuerda para finalizar que tal vez no se si esto dure por siempre pero que te quiero a ti para siempre eso si lo se, se que no soy perfecto pero vales la pena pase lo que pase quiero intentarlo contigo.";
-
-        let currentPart = 0;
-        const letterPopup = document.getElementById('letter-popup');
-        const letterCard = document.getElementById('letter-card');
-        const letterContent = document.getElementById('letter-content');
-        const nextButton = document.getElementById('next-button');
-        const finalMessagePopup = document.getElementById('final-message-popup');
-        const finalLetterContent = document.getElementById('final-letter-content');
-        const snowmanPopup = document.getElementById('snowman-popup');
-        const opinionPopup = document.getElementById('opinion-popup');
-
-        function typeText(text, element, callback) {
-          let i = 0;
-          element.innerHTML = '';
-          const interval = setInterval(() => {
-            if (i < text.length) {
-              element.innerHTML += text.charAt(i);
-              i++;
-              element.scrollTop = element.scrollHeight;
-            } else {
-              clearInterval(interval);
-              if (callback) callback();
-            }
-          }, 25);
-        }
-
-        window.showLetter = () => {
-          currentPart = 0;
-          letterPopup.classList.remove('hidden');
-          document.getElementById('main-content').classList.add('opacity-0', 'pointer-events-none');
-          setTimeout(() => {
-            letterPopup.classList.remove('opacity-0');
-            letterCard.classList.remove('scale-95');
-            typeText(letterParts[currentPart], letterContent);
-            nextButton.textContent = 'Siguiente';
-            nextButton.style.display = 'block';
-          }, 50);
-        }
-
-        window.closeLetter = () => {
-          letterPopup.classList.add('opacity-0');
-          letterCard.classList.add('scale-95');
-          document.getElementById('main-content').classList.remove('opacity-0', 'pointer-events-none');
-          setTimeout(() => letterPopup.classList.add('hidden'), 300);
-        }
-
-        window.nextPart = () => {
-          currentPart++;
-          if (currentPart < letterParts.length) {
-            letterContent.classList.add('opacity-0');
-            setTimeout(() => {
-              typeText(letterParts[currentPart], letterContent);
-              letterContent.classList.remove('opacity-0');
-              letterContent.scrollTop = 0;
-            }, 300);
-            if (currentPart === letterParts.length - 1) {
-                nextButton.textContent = 'Finalizar';
-            }
-          } else {
-            closeLetter();
-            setTimeout(showFinalMessage, 300);
-          }
-        }
-
-        window.showFinalMessage = () => {
-          finalMessagePopup.classList.remove('hidden');
-          typeText(finalLetterText.join('\n\n'), finalLetterContent);
-          setTimeout(() => {
-            finalMessagePopup.classList.remove('opacity-0');
-            finalMessagePopup.querySelector('div').classList.remove('scale-95');
-          }, 50);
-        }
-        
-        window.closeFinalMessage = () => {
-          finalMessagePopup.classList.add('opacity-0');
-          finalMessagePopup.querySelector('div').classList.add('scale-95');
-          setTimeout(() => {
-              finalMessagePopup.classList.add('hidden');
-              showSnowmanPopup();
-          }, 300);
-        }
-
-        window.showSnowmanPopup = () => {
-            // Heart explosion
-            for (let i = 0; i < 50; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'heart-particle';
-                particle.innerHTML = '❤️';
-                const angle = Math.random() * Math.PI * 2;
-                const distance = Math.random() * 100 + 50;
-                particle.style.left = `calc(50vw + ${Math.cos(angle) * distance}px)`;
-                particle.style.top = `calc(50vh + ${Math.sin(angle) * distance}px)`;
-                particle.style.animationDuration = `${Math.random() * 1 + 1}s`;
-                document.body.appendChild(particle);
-                setTimeout(() => particle.remove(), 2000);
-            }
-
-            snowmanPopup.classList.remove('hidden');
-            setTimeout(() => {
-                snowmanPopup.classList.remove('opacity-0');
-                snowmanPopup.querySelector('div').classList.remove('scale-95');
-                typeText(snowmanText, document.getElementById('snowman-text'));
-            }, 50);
-        }
-
-        window.closeSnowmanPopup = () => {
-            snowmanPopup.classList.add('opacity-0');
-            snowmanPopup.querySelector('div').classList.add('scale-95');
-            setTimeout(() => {
-                snowmanPopup.classList.add('hidden');
-                showOpinionPopup();
-            }, 300);
-        }
-
-        function showOpinionPopup() {
-            opinionPopup.classList.remove('opacity-0');
-            setTimeout(() => {
-                opinionPopup.classList.add('opacity-0');
-            }, 4000);
-        }
-
-        // --- CONTADOR DE TIEMPO JUNTOS ---
-        function setInitialTime() {
-            const now = new Date();
-            const yearsInMs = 3 * 365.25 * 24 * 60 * 60 * 1000;
-            const monthsInMs = 7 * 30.44 * 24 * 60 * 60 * 1000;
-            const daysInMs = 30 * 24 * 60 * 60 * 1000;
-            const hoursInMs = 24 * 60 * 60 * 1000;
-            const totalOffset = yearsInMs + monthsInMs + daysInMs + hoursInMs;
-            return new Date(now.getTime() - totalOffset);
-        }
-        const startDate = setInitialTime();
-
-        function updateTimeCounter() {
-            const now = new Date();
-            let diff = now - startDate;
-
-            const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
-            diff -= years * (1000 * 60 * 60 * 24 * 365.25);
-            
-            const months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.44));
-            diff -= months * (1000 * 60 * 60 * 24 * 30.44);
-
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            diff -= days * (1000 * 60 * 60 * 24);
-
-            const hours = Math.floor(diff / (1000 * 60 * 60));
-            diff -= hours * (1000 * 60 * 60);
-
-            const minutes = Math.floor(diff / (1000 * 60));
-            diff -= minutes * (1000 * 60);
-
-            const seconds = Math.floor(diff / 1000);
-            
-            document.getElementById('years').textContent = years;
-            document.getElementById('months').textContent = months;
-            document.getElementById('days').textContent = days;
-            document.getElementById('hours').textContent = hours;
-            document.getElementById('minutes').textContent = minutes;
-            document.getElementById('seconds').textContent = seconds;
-        }
-        setInterval(updateTimeCounter, 1000); // Update every second
-        updateTimeCounter();
-
-
-        // --- MODO CLARO / OSCURO ---
-        window.toggleTheme = () => {
-          const body = document.body;
-          body.classList.toggle('dark');
-          const isDark = body.classList.contains('dark');
-          
-          const newHeartColor = isDark ? 0x60a5fa : 0xff4f81;
-          const newParticleColor = isDark ? 0x93c5fd : 0xffffff;
-          figuresGroup.children.forEach(child => {
-            if(child.type === "Group") { // Figures
-                child.children.forEach(part => part.material.color.setHex(newHeartColor));
-            } else { // Link
-                child.material.color.setHex(isDark ? 0x60a5fa : 0xffffff);
-            }
-          });
-          stars.material.color.setHex(newParticleColor);
-          
-          body.classList.toggle('bg-gray-900', !isDark);
-          body.classList.toggle('bg-sky-100', isDark);
-
-          document.getElementById('main-title').classList.toggle('text-pink-300', !isDark);
-          document.getElementById('main-title').classList.toggle('text-blue-500', isDark);
-          document.getElementById('main-subtitle').classList.toggle('text-gray-300', !isDark);
-          document.getElementById('main-subtitle').classList.toggle('text-gray-600', isDark);
-          
-          const popups = [letterCard, finalMessagePopup.querySelector('div'), snowmanPopup.querySelector('div')];
-          popups.forEach(p => {
-            p.classList.toggle('bg-gray-800', !isDark);
-            p.classList.toggle('border-gray-700', !isDark);
-            p.classList.toggle('bg-white', isDark);
-            p.classList.toggle('border-gray-200', isDark);
-            p.classList.toggle('text-white', !isDark);
-            p.classList.toggle('text-gray-800', isDark);
-          });
-          
-          document.querySelectorAll('.font-title').forEach(t => {
-            t.classList.toggle('text-pink-300', !isDark);
-            t.classList.toggle('text-blue-400', isDark);
-          });
-          document.querySelectorAll('.text-gray-300').forEach(t => t.classList.toggle('text-gray-600', isDark));
-
-
-          document.getElementById('theme-text').textContent = isDark ? 'Modo Oscuro' : 'Modo Claro';
-          const themeIcon = document.getElementById('theme-icon');
-          themeIcon.innerHTML = isDark 
-            ? `<path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 004.463-.948.75.75 0 01.981.632A11.25 11.25 0 0112 21a11.25 11.25 0 01-9.472-16.592.75.75 0 01.819-.162z" clip-rule="evenodd" />` 
-            : `<path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.106a.75.75 0 010 1.06l-1.591 1.59a.75.75 0 11-1.06-1.06l1.59-1.59a.75.75 0 011.06 0zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5h2.25a.75.75 0 01.75.75zM17.836 17.836a.75.75 0 01-1.06 0l-1.59-1.591a.75.75 0 111.06-1.06l1.59 1.59a.75.75 0 010 1.06zM12 21.75a.75.75 0 01-.75-.75v-2.25a.75.75 0 011.5 0v2.25a.75.75 0 01-.75-.75zM5.164 17.836a.75.75 0 010-1.06l1.59-1.591a.75.75 0 111.06 1.06l-1.59 1.59a.75.75 0 01-1.06 0zM3 12a.75.75 0 01.75-.75h2.25a.75.75 0 010 1.5H3.75A.75.75 0 013 12zM6.106 5.106a.75.75 0 011.06 0l1.591 1.59a.75.75 0 01-1.06 1.06l-1.59-1.591a.75.75 0 010-1.06z"/>`;
-        }
-
-        // --- RESPONSIVIDAD ---
-        window.addEventListener('resize', () => {
+        function onWindowResize() {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        });
+        }
 
-        // --- INICIALIZACIÓN ---
-        init3D();
-        
-        // --- LÓGICA DEL REPRODUCTOR DE MÚSICA ---
-        const playPauseBtn = document.getElementById('play-pause-btn');
-        const playIcon = document.getElementById('play-icon');
-        const pauseIcon = document.getElementById('pause-icon');
-        
-        playPauseBtn.addEventListener('click', () => {
-            if (backgroundMusic.paused) {
-                backgroundMusic.play();
-                playIcon.classList.add('hidden');
-                pauseIcon.classList.remove('hidden');
-            } else {
-                backgroundMusic.pause();
-                playIcon.classList.remove('hidden');
-                pauseIcon.classList.add('hidden');
-            }
-        });
+        function onMouseMove(event) {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        }
 
+        function animate() {
+            requestAnimationFrame(animate);
+
+            stars.rotation.y += 0.0001;
+            
+            camera.position.x += (mouse.x * 2 - camera.position.x) * 0.02;
+            camera.position.y += (-mouse.y * 2 - camera.position.y) * 0.02;
+            camera.lookAt(scene.position);
+
+            renderer.render(scene, camera);
+        }
+        
+        // Iniciar la escena 3D cuando la ventana se haya cargado
+        window.onload = function () {
+            init3D();
+        }
     </script>
 </body>
 </html>
+
